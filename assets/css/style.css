@@ -397,8 +397,8 @@ hr {
 } */
 
 .header-p {
-   margin-top: auto;
-   margin-left: auto;
+   margin-top: 5px;
+   margin-left: 5px;
    text-align: center;
    font-weight: 600;
    font-size: 0.7rem; 
