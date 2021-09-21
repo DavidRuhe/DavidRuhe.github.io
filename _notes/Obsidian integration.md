@@ -1,6 +1,6 @@
 ---
 title: Obsidian integration
-season: summer
+season: automn
 tags: CMS
 ---
 

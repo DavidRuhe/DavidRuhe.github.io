@@ -1,7 +1,7 @@
 ---
 title: How to setup this site
 tags: Theme
-season : summer
+season : automn
 ---
 
 This is going to be a super simple post about how to setup and use this theme for your own website.

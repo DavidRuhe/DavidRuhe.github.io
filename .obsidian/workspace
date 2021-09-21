@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "index.md",
+            "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
             "mode": "source"
           }
         }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "index.md",
+                "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,10 +88,15 @@
   },
   "active": "6f8390142297ea05",
   "lastOpenFiles": [
+    "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+    "_notes/Obsidian integration.md",
+    "_notes/How-to-setup-this-site.md",
+    "_notes/How to use the special features.md",
+    "_notes/how-markdown-is-rendered.md",
+    "_notes/Untitled.md",
+    "_notes/How to use the special features 1.md",
     "index.md",
     "dates.md",
-    "about.md",
-    "tags.md",
-    "_notes/Obsidian integration.md"
+    "about.md"
   ]
 }
