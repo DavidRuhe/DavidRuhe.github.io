@@ -32,6 +32,7 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
     * Research Assistent
     * Language models
     * [[Clustering Biblical Texts Using Re-current Neural Networks::https://research.vu.nl/en/publications/clustering-biblical-texts-using-re-current-neural-networks]]
+
 ## Teaching
 ### Supervision
 * Yke Rusticus: [[Detecting Exoplanet Transit Signals in Light Curves Using Recurrent Neural Networks::https://www.hou.usra.edu/meetings/lpsc2021/pdf/2080.pdf]]
