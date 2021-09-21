@@ -376,7 +376,7 @@ hr {
     vertical-align: middle;
     display: inline-block;
     justify-content: center;
-    border-right: 1px solid #f7f7f7;
+    border: 1px solid #f7f7f7;
     color: #555555; 
 }
 
