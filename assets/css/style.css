@@ -1181,9 +1181,9 @@ img[src*='#center'] {
  display: none;
 }
 
-/* #copyright {
+#copyright {
     margin-left: 20px;
-} */
+}
 
 #copyright-notice {
     font-size: 0.7rem;
