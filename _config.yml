@@ -9,6 +9,7 @@ baseurl: "/" # the subpath of your site, e.g. /blog
 url: "https://davidruhe.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
 encoding: utf-8
 twitter: "https://twitter.com/djjruhe"
+github: "https://github.com/DavidRuhe"
 
 # Build settings
 theme: null
