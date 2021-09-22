@@ -1,6 +1,6 @@
 ---
 layout: post
-title: About
+title: About Me
 permalink: /about/
 content-type: eg
 toc: false
