@@ -36,6 +36,7 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 ## Teaching
 ### Supervision
 * Yke Rusticus: [[Detecting Exoplanet Transit Signals in Light Curves Using Recurrent Neural Networks::https://www.hou.usra.edu/meetings/lpsc2021/pdf/2080.pdf]]
+
 ### Courses
 * Machine Learning 1
 * Machine Learning 2

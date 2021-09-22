@@ -10,6 +10,8 @@ url: "https://davidruhe.github.io/" # the base hostname & protocol for your site
 encoding: utf-8
 twitter: "https://twitter.com/djjruhe"
 github: "https://github.com/DavidRuhe"
+linkedin: "https://www.linkedin.com/in/david-ruhe-2a0a0b155"
+mail: "mailto:d.ruhe@uva.nl"
 
 # Build settings
 theme: null
