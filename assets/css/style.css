@@ -762,6 +762,7 @@ hr {
     margin-right: 30px;
     font-family:  'IBM Plex Sans', Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 15px;
+    text-align: justify;
 }
 
 .tags {
