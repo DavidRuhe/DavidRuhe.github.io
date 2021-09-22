@@ -762,7 +762,6 @@ hr {
     margin-right: 30px;
     font-family:  'IBM Plex Sans', Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 15px;
-    text-align: justify;
 }
 
 .tags {
@@ -788,6 +787,10 @@ hr {
     font-family:  Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-weight: normal !important;
     font-size: 13px;
+}
+
+.content p {
+    text-align: justify;
 }
 
 .content a {
