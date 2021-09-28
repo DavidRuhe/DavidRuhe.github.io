@@ -8,7 +8,7 @@ toc: false
 
 ![personal_photo](/assets/img/CrhnTql4_400x400.jpeg)
 
-I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. I work on developing new machine learning algorithms that can help solve radio-astronomical research questions. My current interests are performing intelligent inference using only sparse or noisy data. My CV can be found [here](assets/img/cv.pdf).
+I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. I work on developing new machine learning algorithms that can help solve radio-astronomical research questions. My current interests are performing intelligent inference using only sparse or noisy data. My CV can be found [here](/assets/img/cv.pdf).
 
 ## Education
 
