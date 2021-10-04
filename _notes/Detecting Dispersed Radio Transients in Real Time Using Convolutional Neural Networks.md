@@ -19,7 +19,7 @@ A key component of astronomy, in general, is the search for [[transients::https:
 Examples are supernovae, gamma-ray bursts, and fast radio bursts.
 Having access to instruments that can now probe a large part of the radio sky in real time opens up new possibilities for discovering these events.
 A characteristic feature of radio transients is that they are dispersed over time and frequency.
-This means that they arrive *earlier at high frequencies than at low frequencies*.
+This means that they arrive *earlier at high frequencies than at low frequencies* (see the figure above).
 In our paper, we use the dispersion of radio transients as a critical feature separating actual astronomical transients from spurious ones.
 In addition, we present and justify methods for processing the realtime all-sky datastream online.
 Using simulated dispersed transients, a [[convolutional neural network::https://en.wikipedia.org/wiki/Convolutional_neural_network]] learns to recover the dispersion measure (that expresses the amount of dispersion) from these simulated events.
