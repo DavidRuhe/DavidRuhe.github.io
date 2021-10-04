@@ -13,3 +13,17 @@ We present a methodology for automated real-time analysis of a radio image data 
 [[Paper Link::https://arxiv.org/abs/2103.15418]]
 
 Co-authors: Mark Kuiack, Antonia Rowlinson, Ralph Wijers, Patrick Forré.
+##### In Layman's Terms
+[[Radio astronomy::https://en.wikipedia.org/wiki/Radio_astronomy]] has entered a new era in which instruments with large fields of view (even all-sky) can now probe the very deep universe in real time.
+A key component of astronomy, in general, is the search for [[transients::https://en.wikipedia.org/wiki/Transient_astronomical_event]]: astronomical phenomena whose durations are on short (milliseconds to days) time scales.
+Examples are supernovae, gamma-ray bursts, and fast radio bursts.
+Having access to instruments that can now probe a large part of the radio sky in real time opens up new possibilities for discovering these events.
+A characteristic feature of radio transients is that they are dispersed over time and frequency.
+This means that they arrive *earlier at high frequencies than at low frequencies*.
+In our paper, we use the dispersion of radio transients as a critical feature separating actual astronomical transients from spurious ones.
+In addition, we present and justify methods for processing the realtime all-sky datastream online.
+Using simulated dispersed transients, a [[convolutional neural network::https://en.wikipedia.org/wiki/Convolutional_neural_network]] learns to recover the dispersion measure (that expresses the amount of dispersion) from these simulated events.
+Recovering such a physical parameter is arguably preferable to direct (black-box) binary classification, as astronomers can use these to filter the data according to their needs.
+After the neural network has finished learning, it is applied to real data.
+We find that it can reliably recover dispersed transients.
+Examples are shown in the figure above.
