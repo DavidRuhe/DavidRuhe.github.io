@@ -8,11 +8,7 @@ toc: false
 
 ![personal_photo](/assets/img/CrhnTql4_400x400.jpeg)
 
-<<<<<<< HEAD
 I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. I work on developing new machine learning algorithms that can help solve radio-astronomical research questions. My current interests are performing intelligent inference using only sparse or noisy data. My CV can be found [here](/assets/pdf/cv.pdf).
-=======
-I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. The project is about developing new techniques that can be applied to radio-astronomical data. My current research interests are performing intelligent inference using only sparse or noisy data.  
->>>>>>> 731ad04 (revert to working version)
 
 ## Education
 
@@ -27,7 +23,6 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 ## Experience
 * [[SURF::https://www.surf.nl/]]
     * High Performance Machine Learning Researcher
-<<<<<<< HEAD
     * [[GANs for very high-dimensional CT-scan generation::https://profs.etsmtl.ca/hlombaert/public/medneurips2019/89_CameraReadySubmission_Med_NeurIPS_Camera_Ready.pdf]]
 * [[Pacmed::https://www.pacmed.ai/]]
     * Research Intern
@@ -49,14 +44,4 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 ## Personal
 I enjoy [[bouldering::https://en.wikipedia.org/wiki/Bouldering]] and recording music.
 I co-organise the [[AI4Science Colloquium.::https://ai4science-amsterdam.github.io/colloquium/]], where we regularly invite established researchers to present their work on the intersection between AI and science.
-=======
-    * GANs for very high-dimensional CT-scan generation.
-* [[Pacmed::https://www.pacmed.ai/]]
-    * Research Intern
-    * Bayesian neural networks for uncertainty quantification using ICU health record data.
-* [[VU University::https://www.vu.nl/]]
-    * Research Assistent
-    * Language models
-
->>>>>>> 731ad04 (revert to working version)
 
