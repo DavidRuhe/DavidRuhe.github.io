@@ -5,7 +5,7 @@ tags: paper_summary transients
 toc: true
 comments: true
 ---
-![[../assets/img/muthukrishna2021real.png.png]]
+![Figure 1](/assets/img/muthukrishna2021real.png)
 > A temporal convolutional neural network and a physics-based Bazin model are trained on simulated light-curves. The task is to predict future flux values. A weighted, time-averaged $\mathcal{X}^2$-score that measures the discrepancy between the predicted and actual flux values. It is asserted that the models can predict future flux values reliably and whether the predictive uncertainty increases with more data. To test their final ability to detect anomalies, both models are trained on SN1a bursts and tested on transients of different classes. The physics-based model outperforms the neural network, meaning that the distribution of $\mathcal{X}^2$ values shifts more significantly for the unseen transients classes. Furthermore, the authors propose a new linear interpolations cheme for sparsely measured light-curves. The methods are tested on real data from the Zwicky Transients Facility.
 
 ###### Comments
