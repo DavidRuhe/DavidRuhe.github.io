@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "14a62cb9f9d6b816",
+        "id": "c50166c0d10bfc4c",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
-            "mode": "source"
+            "file": "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
+            "mode": "preview"
           }
         }
       }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+                "file": "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,17 +86,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "14a62cb9f9d6b816",
+  "active": "c50166c0d10bfc4c",
   "lastOpenFiles": [
+    "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
+    "_notes/Self-Supervised Inference in State-Space Models.md",
     "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+    "_notes/data uncertainty.md",
+    "assets/img/muthukrishna2021real.png.png",
     "_notes/Obsidian integration.md",
     "_notes/how-markdown-is-rendered.md",
     "_notes/How to use the special features.md",
     "_notes/How-to-setup-this-site.md",
-    "_notes/Untitled.md",
-    "_notes/How to use the special features 1.md",
-    "index.md",
-    "dates.md",
-    "about.md"
+    "_notes/How to use the special features 1.md"
   ]
 }
