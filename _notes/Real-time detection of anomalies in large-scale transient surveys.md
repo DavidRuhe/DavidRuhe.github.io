@@ -1,5 +1,5 @@
 ---
-title: #  Real-time detection of anomalies in large-scale transient surveys
+title: Real-time detection of anomalies in large-scale transient surveys
 season: summer
 tags: paper_summary transients
 toc: false
