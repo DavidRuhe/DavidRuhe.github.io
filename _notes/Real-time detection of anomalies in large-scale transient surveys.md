@@ -16,5 +16,5 @@ I think the conclusion of the paper is nice, albeit a bit obvious. The Bazin mod
 
 Other thoughts
 - In Equation 30, $\sigma^2_{y, spt}$ scales down the $\mathcal{X}^2$-score. One would only want this if said quantity truly represents *data uncertainty*. However, to my best knowledge, it is not clear if the neural network can also include *model uncertainty*, which is exactly the type of uncertainty wherewith one does not want to weight down the score!
-- I wonder what the peak is of $g obs$ in Figure 7.
+- I wonder what the peak is of $g_{obs}$ in Figure 7.
 - The authors rightfully state that the $CNN$ cannot model entire light curves and that an auto-encoder might have been better. Why didn't they do as such?
