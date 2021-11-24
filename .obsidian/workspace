@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
+            "file": "_notes/End-to-End Weak Supervision.md",
             "mode": "source"
           }
         }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
+                "file": "_notes/End-to-End Weak Supervision.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,6 +88,7 @@
   },
   "active": "c50166c0d10bfc4c",
   "lastOpenFiles": [
+    "_notes/End-to-End Weak Supervision.md",
     "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
     "_notes/Self-Supervised Inference in State-Space Models.md",
     "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
@@ -96,7 +97,6 @@
     "_notes/Obsidian integration.md",
     "_notes/how-markdown-is-rendered.md",
     "_notes/How to use the special features.md",
-    "_notes/How-to-setup-this-site.md",
-    "_notes/How to use the special features 1.md"
+    "_notes/How-to-setup-this-site.md"
   ]
 }
