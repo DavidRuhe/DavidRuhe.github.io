@@ -1,7 +1,7 @@
 ---
 title: Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks
 season: summer
-tags: paper transients radio-astronomy
+tags: paper transients radio_astronomy
 toc: true
 comments: true
 ---

@@ -1,7 +1,7 @@
 ---
 title: Self-Supervised Inference in State-Space Models
 season: summer
-tags: paper state-space-model kalman-filter rnn
+tags: paper state_space_model kalman_filter rnn
 toc: true
 comments: true
 ---
