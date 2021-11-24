@@ -9,8 +9,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
-            "mode": "source"
+            "file": "_notes/End-to-End Weak Supervision.md",
+            "mode": "preview"
           }
         }
       }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+                "file": "_notes/End-to-End Weak Supervision.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,10 +88,10 @@
   },
   "active": "c50166c0d10bfc4c",
   "lastOpenFiles": [
-    "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
     "_notes/End-to-End Weak Supervision.md",
-    "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
     "_notes/Self-Supervised Inference in State-Space Models.md",
+    "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
+    "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
     "_notes/data uncertainty.md",
     "assets/img/muthukrishna2021real.png",
     "_notes/Obsidian integration.md",

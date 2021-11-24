@@ -1,4 +1,3 @@
-#  End-to-End Weak Supervision
 ---
 title: End-to-End Weak Supervision
 season: summer
