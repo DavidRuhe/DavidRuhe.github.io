@@ -23,19 +23,20 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 ## Experience
 * [[SURF::https://www.surf.nl/]]
     * High Performance Machine Learning Researcher
-    * [[GANs for very high-dimensional CT-scan generation::https://profs.etsmtl.ca/hlombaert/public/medneurips2019/89_CameraReadySubmission_Med_NeurIPS_Camera_Ready.pdf]]
+    <!-- * [[GANs for very high-dimensional CT-scan generation::https://profs.etsmtl.ca/hlombaert/public/medneurips2019/89_CameraReadySubmission_Med_NeurIPS_Camera_Ready.pdf]] -->
 * [[Pacmed::https://www.pacmed.ai/]]
     * Research Intern
     * Bayesian neural networks for uncertainty quantification using ICU health record data.
-    * [[Using Uncertainty to Improve Trustworthiness in Medical Applications::https://aiforsocialgood.github.io/icml2019/accepted/track1/pdfs/38_aisg_icml2019.pdf]]
+    <!-- * [[Using Uncertainty to Improve Trustworthiness in Medical Applications::https://aiforsocialgood.github.io/icml2019/accepted/track1/pdfs/38_aisg_icml2019.pdf]] -->
 * [[VU University::https://www.vu.nl/]]
     * Research Assistent
     * Language models
-    * [[Clustering Biblical Texts Using Re-current Neural Networks::https://research.vu.nl/en/publications/clustering-biblical-texts-using-re-current-neural-networks]]
+    <!-- * [[Clustering Biblical Texts Using Re-current Neural Networks::https://research.vu.nl/en/publications/clustering-biblical-texts-using-re-current-neural-networks]] -->
 
 ## Teaching
 ### Supervision
-* Yke Rusticus: [[Detecting Exoplanet Transit Signals in Light Curves Using Recurrent Neural Networks::https://www.hou.usra.edu/meetings/lpsc2021/pdf/2080.pdf]]
+<!-- * Yke Rusticus: [[Detecting Exoplanet Transit Signals in Light Curves Using Recurrent Neural Networks::https://www.hou.usra.edu/meetings/lpsc2021/pdf/2080.pdf]] -->
+* Yke Rusticus: Detecting Exoplanet Transit Signals in Light Curves Using Recurrent Neural Networks
 
 ### Courses
 * Machine Learning 1
