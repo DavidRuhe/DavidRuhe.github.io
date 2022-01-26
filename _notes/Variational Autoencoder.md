@@ -5,7 +5,6 @@ tags: generative_models
 toc: false
 comments: true
 ---
-$\newcommand{\bm}{\boldsymbol}$
 The Variational Autoencoder (Kingma & Welling, 2013) is a [[Latent Variable Model]] that targets 
 $$
 \begin{aligned}
