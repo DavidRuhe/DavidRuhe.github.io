@@ -9,7 +9,7 @@ The Variational Autoencoder (Kingma & Welling, 2013) is a [[Latent Variable Mode
 $$
 \begin{aligned}
 \min_{\phi, \theta} D_{KL}[q_\phi(\mathbf x, \mathbf z) || p_\theta(\mathbf x, \mathbf z)] &= \mathbb{E}_{q(x)q_\phi(z|x)}[\log q_\phi(\mathbf z \mid \mathbf x) - \log p_\theta(\mathbf x \mid \mathbf z) - \log p_\theta(\mathbf z)] \\
-&= \mathbb{E}_{q(x)q_\phi(z|x)}[-\log p_\theta(\mathbf x \mid \mathbf z)] + D_{KL}[q_\phi(\mathbf z \mid \mathbf x || p_\theta(\mathbf z))] \\
+&= \mathbb{E}_{q(x)}\left[\mathbb{E}_{q_\phi(z|x)}[-\log p_\theta(\mathbf x \mid \mathbf z)] + D_{KL}[q_\phi(\mathbf z \mid \mathbf x) || p_\theta(\mathbf z))]\right] \\
 &=: \text{Variational Free Energy}
 \end{aligned}
 $$
