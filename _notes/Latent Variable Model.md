@@ -1,5 +1,5 @@
 ---
-title: "Variational Autoencoder"
+title: "Latent Variable Model"
 season: winter
 toc: false
 comments: true
