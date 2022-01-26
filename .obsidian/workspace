@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "c50166c0d10bfc4c",
+        "id": "20ee3dd398224c8d",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
-            "mode": "preview"
+            "file": "_notes/Variational Diffusion Models.md",
+            "mode": "source"
           }
         }
       }
@@ -39,7 +39,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "evangel",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -48,8 +48,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -69,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+                "file": "_notes/Variational Diffusion Models.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,17 +86,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "c50166c0d10bfc4c",
+  "active": "20ee3dd398224c8d",
   "lastOpenFiles": [
-    "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
+    "_notes/Variational Diffusion Models.md",
     "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
     "_notes/Self-Supervised Inference in State-Space Models.md",
+    "README.md",
+    "_notes/Latent Variable Model.md",
+    "_notes/Variational Autoencoder.md",
     "_notes/Glow - Generative Flow with Invertible 1x1 Convolutions.md",
+    "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
     "_notes/End-to-End Weak Supervision.md",
-    "_notes/data uncertainty.md",
-    "assets/img/muthukrishna2021real.png",
-    "_notes/Obsidian integration.md",
-    "_notes/how-markdown-is-rendered.md",
-    "_notes/How to use the special features.md"
+    "_notes/data uncertainty.md"
   ]
 }

@@ -1,7 +1,7 @@
 ---
 title: "Glow: Generative Flow with Invertible 1x1 Convolutions"
 season: spring
-tags: paper_summary generative_models, normalizing_flows
+tags: paper_summary generative_models normalizing_flows
 toc: false
 comments: true
 ---
