@@ -7,7 +7,6 @@ comments: true
 ---
 $\newcommand{\bm}{\boldsymbol}$
 $\newcommand{\bf}{\mathbf}$
-# Variational Autoencoder
 The Variational Autoencoder (Kingma & Welling, 2013) is a [[Latent Variable Model]] that targets 
 $$
 \begin{aligned}
