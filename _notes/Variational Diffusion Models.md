@@ -30,7 +30,7 @@ where we implicitly $\mathbf z_{0}:=\mathbf x$.
 
 We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic, 
 
-where we used that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term $\sigma^2_{t|t-1}$.
+where we used that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term 
 
 But we also know that $z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
 
