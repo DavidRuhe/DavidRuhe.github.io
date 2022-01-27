@@ -48,7 +48,7 @@ $$\begin{aligned}\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \math
 
 This equality is not straightforward, but we include the derivation.
 
-[[$\begin{aligned}x^2&=x^2\\&=y^2\end{aligned}$::srs]]
+[[$$\begin{aligned}x^2&=x^2\\&=y^2\end{aligned}$$::srs]]
 
 $$\begin{aligned}
 \log q(\mathbf z_{1:T} | \mathbf x) - \log p(\mathbf z_{1:T}, \mathbf x) 
