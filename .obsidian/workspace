@@ -89,14 +89,14 @@
   "active": "20ee3dd398224c8d",
   "lastOpenFiles": [
     "_notes/Variational Diffusion Models.md",
+    "_notes/Latent Variable Model.md",
+    "_notes/Variational Autoencoder.md",
+    "_posts/Variational Autoencoder.md",
     "_notes/Real-time detection of anomalies in large-scale transient surveys.md",
     "_notes/Self-Supervised Inference in State-Space Models.md",
     "README.md",
-    "_notes/Latent Variable Model.md",
-    "_notes/Variational Autoencoder.md",
     "_notes/Glow - Generative Flow with Invertible 1x1 Convolutions.md",
     "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
-    "_notes/End-to-End Weak Supervision.md",
-    "_notes/data uncertainty.md"
+    "_notes/End-to-End Weak Supervision.md"
   ]
 }

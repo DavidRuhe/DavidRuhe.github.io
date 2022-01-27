@@ -25,7 +25,9 @@ $$q(\mathbf z_{1:T}, \mathbf x) = q(\mathbf x) \prod_{t-1}^T  q(\mathbf z_t | \m
 where we implicitly $\mathbf z_{0}:=\mathbf x$.
 
 We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic, 
-$$z_{t} \sim \mathcal{N}(\alpha_{t|t-1} \alpha_{t-1} \mathbf x, \alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I + \sigma^2_{t|t-1} \mathbf I),$$ where we used that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term $\sigma^2_{t|t-1}$). But we also know that $z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
+$$z_{t} \sim \mathcal{N}(\alpha_{t|t-1} \alpha_{t-1} \mathbf x, \alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I + \sigma^2_{t|t-1} \mathbf I),$$ where we used that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term $\sigma^2_{t|t-1}$.
+
+But we also know that $z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
 $$\alpha_{t|t-1} \alpha_{t-1} \mathbf x = \alpha_t \mathbf x \iff \alpha_{t|t-1} = \alpha_t / \alpha_{t-1}$$
 $$\alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I  + \sigma^2_{t|t-1} \mathbf I   = \sigma^2_t \mathbf I \iff \sigma^2_{t|t-1}  = \alpha_{t|t-1}^2 \sigma^2_{t-1}  - \sigma^2_t $$
 Therefore, we also know analytically that $q(\mathbf z_t \mid \mathbf z_{t-1}) = \mathcal{N}(\alpha_{t|t-1} \mathbf z_{t-1}, \sigma_{t|t-1}\mathbf I)$ and we can directly compute the parameters from the known noise schedule parameters.
