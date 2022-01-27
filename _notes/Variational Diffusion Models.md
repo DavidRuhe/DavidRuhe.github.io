@@ -48,6 +48,8 @@ $$\begin{aligned}\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \math
 
 This equality is not straightforward, but we include the derivation.
 
+[[$x^2$::srs]]
+
 [[$$\begin{aligned}
 \log q(\mathbf z_{1:T} | \mathbf x) - \log p(\mathbf z_{1:T}, \mathbf x) 
 &= -\log p(\mathbf z_T)- p(\mathbf x \mid \mathbf z_1) + q(\mathbf z_1 \mid \mathbf x) +  \sum_{t=2}^T \log q(\mathbf z_t|\mathbf z_{t-1}) - \log p(\mathbf z_{t-1}|\mathbf z_t) \\
