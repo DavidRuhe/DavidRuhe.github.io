@@ -108,23 +108,24 @@ Note that we know $q(\mathbf z_t \mid z_s)$ analytically for every $s$ < $t$, ev
 
 The diffusion loss, as shown in Appendix B.3., finally becomes
 
-$$\mathcal{L}_D:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log-\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{2}$$
+$$\mathcal{L}_D:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log-\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{3}$$
 
 with $\log-\mathrm{SNR'}(t) = \frac{d \log \mathrm{SNR}(t)}{dt} = \frac{d \log \alpha_t^2 / \sigma_t^2}{dt}$.
 
-This loss function is a continuous version approximation of $(1)$, stochastically integrated.
+This loss function is a continuous version approximation of $(2)$, using Monte Carlo integration.
 
 ## Learned Noise Schedule
 We left open the question how to set $\alpha_t$ and $\sigma_t$. So long as we stick to the requirements (monotonicity), we can learn the noise schedule. To do so, we implement a monotonic neural network that takes a time-step $t$ and outputs a (log) signal-to-noise ratio $\alpha_t^2 / \sigma_t^2$.
 	
 ## Implementation
-We have all the required ingredients to start coding. 
-
+We have all the required ingredients to start coding. Here, we implement the loss function $(3)$. 
 ```python
-    def get_loss(self, x, t, e=None):
+    def get_loss(self, x):
 
-        if e is None:
-            e = torch.randn_like(x)
+        batch_size = len(x)
+
+        e = torch.randn_like(x)
+        t = torch.rand((batch_size,), device=self.device)
 
         mu_zt_zs, sigma_zt_zs, norm_nlogsnr_t = self.q_zt_zs(zs=x, t=t)
 
@@ -136,15 +137,104 @@ We have all the required ingredients to start coding.
         logsnr_t, _ = self.snrnet(t)
         logsnr_t_grad = autograd.grad(logsnr_t.sum(), t)[0]
 
-        loss = (
+        diffusion_loss = (
             -0.5
             * logsnr_t_grad
-            * F.mse_loss(e, e_hat, reduction="none").mean(dim=(1, 2, 3))
+            * F.mse_loss(e, e_hat, reduction="none").sum(dim=(1, 2, 3))
         )
+        diffusion_loss = diffusion_loss.sum() / batch_size
 
-        loss = loss.mean()
+        mu_z1_x, sigma_z1_x, _ = self.q_zt_zs(zs=x, t=torch.ones_like(t))
+        prior_kl = gaussian_kl(mu_z1_x, sigma_z1_x)
+        prior_loss = prior_kl.sum() / batch_size
+
+        loss = diffusion_loss + prior_loss
 
         return loss
 ```
+We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(z_t|z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise  using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here. Note that $q(\mathbf z_0\mid \mathbf x)$ is $\delta(\mathbf x_0)$ and we can then obtain zero likelihood loss.
 
+
+Let's now zoom in on `q_zt_zs`, the forward noising model.
+
+```python
+    def q_zt_zs(self, zs, t, s=None):
+
+        if s is None:
+            s = torch.zeros_like(t)
+
+        logsnr_t, norm_nlogsnr_t = self.snrnet(t)
+        logsnr_s, norm_nlogsnr_s = self.snrnet(s)
+
+        alpha_sq_t = torch.sigmoid(logsnr_t)
+        alpha_sq_s = torch.sigmoid(logsnr_s)
+
+        alpha_t = alpha_sq_t.sqrt()
+        alpha_s = alpha_sq_s.sqrt()
+
+        sigma_sq_t = 1 - alpha_sq_t
+        sigma_sq_s = 1 - alpha_sq_s
+
+        alpha_sq_tbars = alpha_sq_t / alpha_sq_s
+        sigma_sq_tbars = sigma_sq_t - alpha_sq_tbars * sigma_sq_s
+
+        alpha_tbars = alpha_t / alpha_s
+        sigma_tbars = torch.sqrt(sigma_sq_tbars)
+
+        return alpha_tbars * zs, sigma_tbars, norm_nlogsnr_t
+```
+
+Note that by putting $\alpha^2_t := \sigma(\gamma(t))$, where $\gamma$ is our learned SNR schedule we keep $\alpha_t^2 + \sigma_t^2 = 1$. This is fine, as the authors show that the continuous time model is invariant to the noise schedule, and therefore also the absolute values. Only the signal-to-noise ratios of the begin and endpoints are important. Note that
+$$\sigma\left(\log \frac{\alpha^2}{\sigma^2}\right) = \frac{1}{1+e^{\log \sigma^2 / \alpha^2}} = \frac{1}{1+\sigma^2 / \alpha^2} = \frac{\alpha^2}{\sigma^2 + \alpha^2} = \alpha^2$$
+
+Then, we use the formulas for $\alpha^2_{t|s}$ that we and return the mean and standard deviation (and a normalized log-SNR for the denoising model to condition on).
+
+That's it! More is not needed for training. The implementations for the denoising model (a UNet-type) and the SNRnet are given later. We first zoom in on how to sample from the model.
+
+## Sampling
+Sampling from a diffusion model is easy, but requires much compute. We need to discretize the reverse dfifusion process and iterate through the process. 
+
+$$\mathbf x \leftarrow \dots \leftarrow \mathbf z_{s} \leftarrow \dots \leftarrow \mathbf z_t \leftarrow \dots \leftarrow \mathbf z_T$$
+
+I.e., we sample $\mathbf z_t \sim p(\mathbf z_T)$ and use our learned $p(\mathbf z_{t-1} \mid \mathbf z_t)$ to iteratively sample until we reach $t=0$. We are free to choose the discretization granularity, but the paper shows that more time-steps is better. 
+```python
+    @torch.no_grad()
+    def sample_loop(self, batch_size):
+		
+
+        img = torch.randn(shape, device=self.device)
+
+        timesteps = torch.linspace(0, 1, self.num_timesteps)
+
+        for i in tqdm(
+            reversed(range(1, self.num_timesteps)),
+            desc="Time-step",
+            total=self.num_timesteps,
+        ):
+
+            t = torch.full((batch_size,), timesteps[i], device=img.device)
+            s = torch.full((batch_size,), timesteps[i - 1], device=img.device)
+
+            img = self.p_sample(img, t=t, s=s)
+        return img
+
+```
+Here, we see that the number of time-steps is set by `self.num_timesteps` and $[0, 1]$ is simply split into this number of parts. 
+
+```python
+    @torch.no_grad()
+    def p_sample(self, x, t, s, clip_denoised=True, repeat_noise=False):
+        b, *_, device = *x.shape, x.device
+
+        model_mean, model_variance = self.p_mean_variance(
+            zt=x, t=t, s=s, clip_denoised=clip_denoised
+        )
+        noise = noise_like(x.shape, device, repeat_noise)
+        # no noise when t == 0
+        nonzero_mask = (1 - (t == 0).float()).reshape(b, *((1,) * (len(x.shape) - 1)))
+        return model_mean + nonzero_mask * model_variance.sqrt() * noise
+```
+
+
+Will be continued.
 
