@@ -88,6 +88,7 @@ $$p_\theta(\mathbf z_{t-1} \mid \mathbf z_t) := q(\mathbf z_{t-1} \mid \mathbf z
 To see this, consider the paper's Appendix B Equations (34)-(40). However, since the KL-divergence between two Gaussianas involves a mean-squared error between the two means, it is easily seen that 
 
 $$\Vert \boldsymbol \mu_{t-1|t} -\hat{\boldsymbol \mu}_{t-1|t}\Vert^2_2 = \left(\frac{\alpha_{t-1} \sigma_{t|t-1}^2}{\sigma_t^2}\right)^2 \Vert \mathbf x - \hat{\mathbf x}_\theta(\mathbf z_t; t) \Vert^2_2,$$
+
 i.e., we are just reconstructing $\mathbf x$.
 
 Furthermore, Since we know $\mathbf x$ and $\mathbf z_t$, our model can equivalently try to recover the additive noise through the relation:
