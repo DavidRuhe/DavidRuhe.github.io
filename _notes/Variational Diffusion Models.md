@@ -5,15 +5,15 @@ tags: blog generative_models diffusion
 toc: false
 comments: true
 ---
-# Overview
+## Overview
 *Generative models...*
 
 *Diffusion models...*
 
 *In this post...*
 
-# Outline
-# Model Development
+## Outline
+## Model Development
 In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of eachother, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number on the interval $[0, 1]$ determines such an encoder as follows:
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
 where $\alpha_t$ and $\sigma_t$ are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum and $\mathbf z_t$ the encoded variable. As such, the encoding process simply adds Gaussian noise to our data with each time-step $t$. We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, when $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
@@ -68,7 +68,7 @@ The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ a
 
 The obtained three terms form the loss function that we presented earlier.
 
-# Analyzing The Divergence
+## Analyzing The Divergence
 The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. The second term is a data likelihood term (e.g., reconstruction loss). The other terms form the "diffusion loss". These can also be rewritten in a way that we only have to perform data reconstruction during training.
 
 $$\begin{aligned}
@@ -103,21 +103,21 @@ which works better in practice.
 
 
 
-# Continuous Time
+## Continuous Time
 Note that we know $q(\mathbf z_t \mid z_s)$ analytically for every $s$ < $t$, even when we use continuous time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. This, combined with the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon_t$), means that we can $t$ in a continuous interval and keep performing the reconstruction task. Only when we sample from the model we need to discretize (as shown later).
 
-The loss function, as shown in Appendix B.3., finally becomes
+The diffusion loss, as shown in Appendix B.3., finally becomes
 
-$$\mathcal{L}:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log-\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{2}$$
+$$\mathcal{L}_D:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log-\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{2}$$
 
 with $\log-\mathrm{SNR'}(t) = \frac{d \log \mathrm{SNR}(t)}{dt} = \frac{d \log \alpha_t^2 / \sigma_t^2}{dt}$.
 
-This loss function is a stochastic approximation of $(1)$.
+This loss function is a continuous version approximation of $(1)$, stochastically integrated.
 
-### Learned Noise Schedule
+## Learned Noise Schedule
 We left open the question how to set $\alpha_t$ and $\sigma_t$. So long as we stick to the requirements (monotonicity), we can learn the noise schedule. To do so, we implement a monotonic neural network that takes a time-step $t$ and outputs a (log) signal-to-noise ratio $\alpha_t^2 / \sigma_t^2$.
 	
-# Implementation
+## Implementation
 We have all the required ingredients to start coding. 
 
 ```python
