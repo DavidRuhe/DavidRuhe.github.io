@@ -186,6 +186,8 @@ Let's now zoom in on `q_zt_zs`, the forward noising model.
 
 Note that by putting $\alpha^2_t := \sigma(\gamma(t))$, where $\gamma$ is our learned SNR schedule we keep $\alpha_t^2 + \sigma_t^2 = 1$. This is fine, as the authors show that the continuous time model is invariant to the noise schedule, and therefore also the absolute values. Only the signal-to-noise ratios of the begin and endpoints are important. Note that
 
+$$\sigma\left(\log \frac{\alpha^2}{\sigma^2}\right) = \frac{1}{1+e^{\log \sigma^2 / \alpha^2}} = \frac{1}{1+\sigma^2 / \alpha^2} = \frac{\alpha^2}{\sigma^2 + \alpha^2} = \alpha^2$$
+
 Then, we use the formulas for $\alpha^2_{t\mid s}$ that we and return the mean and standard deviation (and a normalized log-SNR for the denoising model to condition on).
 
 That's it! More is not needed for training. The implementations for the denoising model (a UNet-type) and the SNRnet are given later. We first zoom in on how to sample from the model.
