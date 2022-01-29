@@ -27,7 +27,7 @@ Therefore, the inference distribution factorizes as
 $$q(\mathbf z_{1:T}, \mathbf x) = q(\mathbf x) q(\mathbf z_1 \mid \mathbf x) \prod_{t=2}^T  q(\mathbf z_t | \mathbf z_{t-1}).$$
 
 We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic
-[[We used the fact that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term $\sigma_{t \mid t-1}^2$).::rsn]],
+[[We used the fact that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term with variance $\sigma_{t \mid t-1}^2$).::rsn]],
 
 $$\mathbf z_t \sim \mathcal{N}(\alpha_{t|t-1} \alpha_{t-1} \mathbf x,\, \alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I + \sigma^2_{t|t-1}\mathbf I)$$
 
@@ -98,13 +98,13 @@ $$\Vert \boldsymbol \mu_{t-1|t} -\hat{\boldsymbol \mu}_{t-1|t}\Vert^2_2 = \left(
 i.e., we are just reconstructing $\mathbf x$.
 
 Furthermore, Since we know $\mathbf x$ and $\mathbf z_t$, our model can equivalently try to recover the additive noise through the relation:
-$$\mathbf z_t = \mathbf x + \boldsymbol \epsilon_t,$$
+$$\mathbf z_t = \alpha_t \mathbf x + \sigma_t \boldsymbol \epsilon,$$
 which works better in practice.
 
 
 
 ## Continuous Time
-Note that we know $q(\mathbf z_t \mid z_s)$ analytically for every $s$ < $t$, even when we use continuous time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. This, combined with the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon_t$), means that we can $t$ in a continuous interval and keep performing the reconstruction task. Only when we sample from the model we need to discretize (as shown later).
+Note that we know $q(\mathbf z_t \mid z_s)$ analytically for every $s$ < $t$, even when we use continuous time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. This, combined with the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon$), means that we can $t$ in a continuous interval and keep performing the reconstruction task. Only when we sample from the model we need to discretize (as shown later).
 
 The diffusion loss, as shown in Appendix B.3., finally becomes
 
@@ -231,11 +231,123 @@ Here, we see that the number of time-steps is set by `self.num_timesteps` and $[
             zt=x, t=t, s=s, clip_denoised=clip_denoised
         )
         noise = noise_like(x.shape, device, repeat_noise)
-        # no noise when t == 0
-        nonzero_mask = (1 - (t == 0).float()).reshape(b, *((1,) * (len(x.shape) - 1)))
+        # no noise when s == 0
+        nonzero_mask = (1 - (s == 0).float()).reshape(b, *((1,) * (len(x.shape) - 1)))
         return model_mean + nonzero_mask * model_variance.sqrt() * noise
 ```
 
+Next, we implement $p(\mathbf z_s \mid z_t)$. 
 
-Will be continued.
+```python
+    def p_zs_zt(self, zt, t, s, clip_denoised: bool):
+
+        logsnr_t, norm_nlogsnr_t = self.snrnet(t)
+        logsnr_s, norm_nlogsnr_s = self.snrnet(s)
+
+        alpha_sq_t = torch.sigmoid(logsnr_t)[:, None, None, None]
+        alpha_sq_s = torch.sigmoid(logsnr_s)[:, None, None, None]
+
+        alpha_t = alpha_sq_t.sqrt()
+        alpha_s = alpha_sq_s.sqrt()
+
+        sigmasq_t = 1 - alpha_sq_t
+        sigmasq_s = 1 - alpha_sq_s
+
+        alpha_sq_tbars = alpha_sq_t / alpha_sq_s
+        sigmasq_tbars = sigmasq_t - alpha_sq_tbars * sigmasq_s
+
+        alpha_tbars = alpha_t / alpha_s
+        sigma_tbars = torch.sqrt(sigmasq_tbars)
+
+        sigma_t = sigmasq_t.sqrt()
+
+        e_hat = self.denoise_fn(zt, norm_nlogsnr_t)
+
+        if clip_denoised:
+            e_hat.clamp_((zt - alpha_t) / sigma_t, (zt + alpha_t) / sigma_t)
+
+        mu_zs_zt = (
+            1 / alpha_tbars * zt - sigmasq_tbars / (alpha_tbars * sigma_t) * e_hat
+        )
+        sigmasq_zs_zt = sigmasq_tbars * (sigmasq_s / sigmasq_t)
+
+        return mu_zs_zt, sigmasq_zs_zt
+```
+
+We know that $$p(\mathbf z_s \mid \mathbf z_t) = q(\mathbf z_s \mid \mathbf z_t, \mathbf x=\hat{\mathbf x}_\theta(\mathbf z_t; t)).$$
+
+Our model outputs estimated noise and since $\mathbf z_t = \alpha_t \mathbf x + \sigma_t \mathbf \epsilon \iff \mathbf{x} = \frac{\mathbf z_t - \sigma_t \epsilon}{\alpha_t}$ we get (we shorthand $\hat{\mathbf x} := \hat{\mathbf x}_\theta(\mathbf z_t; t))$)
+
+$$\begin{aligned}
+\hat{\mu}_{s \mid t} &= \frac{\alpha_{t\mid s} \sigma^2_s}{\sigma_t^2} \mathbf z_t + \frac{\alpha_s \sigma^2_{t\mid s}}{\sigma_t^2} \hat{\mathbf x} \\
+&= \left( \frac{\alpha_{t\mid s} \sigma^2_s}{\sigma_t^2}  + \frac{\alpha_s \sigma^2_{t\mid s}}{\alpha_t \sigma_t^2}\right)\mathbf z_t- \frac{\alpha_s \sigma^2_{t\mid s}}{\sigma_t^2}\frac{\sigma_t}{\alpha_t}\hat{\boldsymbol \epsilon} \\
+&= \left( \frac{\alpha_{t\mid s} \sigma^2_s + \alpha_{t \mid s}^{-1} \sigma^2_{t\mid s}}{ \sigma_t^2}  \right)\mathbf z_t- \alpha_{t|s}^{-1}\frac{\sigma^2_{t\mid s}}{\sigma_t}\hat{\boldsymbol \epsilon} \\
+&= \left( \frac{\alpha_{t\mid s} \sigma^2_s + \alpha^{-1}_{t \mid s}(\sigma_t^2 - \alpha_{t\mid s}^2 \sigma_s^2)}{ \sigma_t^2}  \right)\mathbf z_t- \frac{\sigma^2_{t\mid s}}{\alpha_{t|s}\sigma_t}\hat{\boldsymbol \epsilon} \\
+&= \frac{1}{\alpha_{t \mid s}} \mathbf z_t- \frac{\sigma^2_{t\mid s}}{\alpha_{t|s}\sigma_t}\hat{\boldsymbol \epsilon} \\
+\end{aligned}$$
+
+This final line is what we coded. The variance remains the same as $q(\mathbf z_s \mid \mathbf z_t, \mathbf x)$.
+
+Finally, since $\mathbf x$ should be bounded between $[-1, 1]$, we know that $\hat{\epsilon}$ should also be bounded as 
+$$\begin{aligned}
+&-1 \leq \mathbf x \leq 1\\
+\iff &-1 \leq \frac{\mathbf z_t - \sigma_t \hat{\boldsymbol \epsilon}}{\alpha_t} \leq 1 \\
+\iff &-\mathbf z_t -\alpha_t  \leq  - \sigma_t \hat{\boldsymbol \epsilon} \leq - \mathbf z_t + \alpha_t \\
+\iff &\frac{\mathbf z_t - \alpha_t}{\sigma_t}  \leq  \hat{\boldsymbol \epsilon} \leq \frac{ \mathbf z_t + \alpha_t}{\sigma_t}
+\end{aligned}$$
+which is also coded in the provided snippet.
+
+That concludes sampling!
+
+## Implementation
+Some final details are how the learned noise schedule is implemented and the specific model choices.
+
+In our code, we do not exactly follow what the authors propose but stick to the previous diffusion UNet-type architecture provided by the Lucidrains repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows
+
+```python
+class SNRNetwork(nn.Module):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.l1 = PositiveLinear(1, 1)
+        self.l2 = PositiveLinear(1, 1024)
+        self.l3 = PositiveLinear(1024, 1)
+
+        self.gamma_min = nn.Parameter(torch.tensor(-10.0))
+        self.gamma_max = nn.Parameter(torch.tensor(20.0))
+
+        self.softplus = nn.Softplus()
+
+    def forward(self, t: torch.Tensor):  # type: ignore
+
+        # Add start and endpoints 0 and 1.
+        t = torch.cat([torch.tensor([0.0, 1.0], device=t.device), t])
+        l1 = self.l1(t[:, None])
+        l2 = torch.sigmoid(self.l2(l1))
+        l3 = torch.squeeze(l1 + self.l3(l2), dim=-1)
+
+        s0, s1, sched = l3[0], l3[1], l3[2:]
+
+        norm_nlogsnr = (sched - s0) / (s1 - s0)
+
+        nlogsnr = self.gamma_min + self.softplus(self.gamma_max) * norm_nlogsnr
+        return -nlogsnr, norm_nlogsnr
+```
+
+with
+
+```python
+class PositiveLinear(nn.Module):
+    def __init__(self, in_features: int, out_features: int) -> None:
+        super().__init__()
+
+        self.weight = nn.Parameter(torch.randn(in_features, out_features))
+        self.bias = nn.Parameter(torch.zeros(out_features))
+        self.softplus = nn.Softplus()
+
+    def forward(self, input: torch.Tensor):  # type: ignore
+        return input @ self.softplus(self.weight) + self.softplus(self.bias)
+```
+
+## Conclusion
 
