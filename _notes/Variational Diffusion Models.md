@@ -292,12 +292,14 @@ $$\begin{aligned}
 This final line is what we coded. The variance remains the same as $q(\mathbf z_s \mid \mathbf z_t, \mathbf x)$.
 
 Finally, since $\mathbf x$ should be bounded between $[-1, 1]$, we know that $\hat{\epsilon}$ should also be bounded as 
+
 $$\begin{aligned}
 &-1 \leq \mathbf x \leq 1\\
 \iff &-1 \leq \frac{\mathbf z_t - \sigma_t \hat{\boldsymbol \epsilon}}{\alpha_t} \leq 1 \\
 \iff &-\mathbf z_t -\alpha_t  \leq  - \sigma_t \hat{\boldsymbol \epsilon} \leq - \mathbf z_t + \alpha_t \\
 \iff &\frac{\mathbf z_t - \alpha_t}{\sigma_t}  \leq  \hat{\boldsymbol \epsilon} \leq \frac{ \mathbf z_t + \alpha_t}{\sigma_t}
 \end{aligned}$$
+
 which is also coded in the provided snippet.
 
 That concludes sampling!
