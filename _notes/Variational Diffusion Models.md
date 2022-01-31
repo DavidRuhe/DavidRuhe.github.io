@@ -5,14 +5,17 @@ tags: blog generative_models diffusion
 toc: false
 comments: true
 ---
+[[Note, this is still work in progress. If anything about the post or code is not clear, please let me know!::wrap]]
 ## Overview
-*Generative models...*
+Generative models are statistical models that model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANS)](), [Normalizing Flows]() and [[Variational Autoencoder|Variational Autoencoders]]. The latter is an example of a [[Latent Variable Model]], where a data-point is encoded into a latent variable $\mathbf z$ that should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
 
-*Diffusion models...*
+Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data-likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding directly the data to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
 
-*In this post...*
+![Figure 1](/assets/img/pgm_diagram_xarrow.png)
 
-## Outline
+In this post, we detail how the models are formally developed and provide a simple implementation. Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models]().
+
+
 ## Model Development
 In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of eachother, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number on the interval $[0, 1]$ determines such an encoder as follows:
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
@@ -350,4 +353,4 @@ class PositiveLinear(nn.Module):
 ```
 
 ## Conclusion
-
+Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple and highly scalable they certainly have useful properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. If you have any questions or comments regarding either the implementation, code or diffusion models in general!
