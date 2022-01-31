@@ -354,7 +354,7 @@ class PositiveLinear(nn.Module):
         return input @ self.softplus(self.weight) + self.softplus(self.bias)
 ```
 
-Again, for all detail,s see our implementation [here](https://github.com/DavidRuhe/simple-variational-diffusion-models).
+Again, for all details, see our implementation [here](https://github.com/DavidRuhe/simple-variational-diffusion-models).
 
 ## Conclusion
 Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple and highly scalable they certainly have useful properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. If you have any questions or comments regarding either the implementation, code or diffusion models in general!
