@@ -121,7 +121,7 @@ This loss function is a continuous version approximation of $(2)$, using Monte C
 We left open the question how to set $\alpha_t$ and $\sigma_t$. So long as we stick to the requirements (monotonicity), we can learn the noise schedule. To do so, we implement a monotonic neural network that takes a time-step $t$ and outputs a (log) signal-to-noise ratio $\alpha_t^2 / \sigma_t^2$.
 	
 ## Implementation
-We have all the required ingredients to start coding. Here, we implement the loss function $(3)$. 
+We have all the required ingredients to start coding. For our full code, click [here](https://github.com/DavidRuhe/simple-variational-diffusion-models). Here, we implement the loss function $(3)$. 
 ```python
     def get_loss(self, x):
 
@@ -304,7 +304,7 @@ which is also coded in the provided snippet.
 
 That concludes sampling!
 
-## Implementation
+## Remaining Bits
 Some final details are how the learned noise schedule is implemented and the specific model choices.
 
 In our code, we do not exactly follow what the authors propose but stick to the previous diffusion UNet-type architecture provided by the Lucidrains repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows
@@ -354,7 +354,7 @@ class PositiveLinear(nn.Module):
         return input @ self.softplus(self.weight) + self.softplus(self.bias)
 ```
 
-Again, for all details, see our implementation [here](https://github.com/DavidRuhe/simple-variational-diffusion-models).
+Again, for all details, see our full implementation [here](https://github.com/DavidRuhe/simple-variational-diffusion-models).
 
 ## Conclusion
 Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple and highly scalable they certainly have useful properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. If you have any questions or comments regarding either the implementation, code or diffusion models in general!
