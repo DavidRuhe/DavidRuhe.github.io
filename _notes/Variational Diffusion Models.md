@@ -9,18 +9,18 @@ comments: true
 ## Overview
 Generative models model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANs)](), [Normalizing Flows]() and [[Variational Autoencoder|Variational Autoencoders]]. The latter is an example of a [[Latent Variable Model]], where a data-point is encoded into a latent variable $\mathbf z$ that usually should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
 
-Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding directly the data to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
+Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding the data directly to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
 
 ![Figure 1](/assets/img/pgm_diagram_xarrow.png)
 
-In this post, we detail how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models](https://arxiv.org/abs/2107.00630).
+This post details how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models](https://arxiv.org/abs/2107.00630).
 
 
 ## Model Development
-In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of eachother, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
+In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of each other, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
-where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum and $\mathbf z_t$ the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
-The process can be modelled with a Markov chain of (very) many additive Gaussian noise transitions. 
+where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum, and $\mathbf z_t$ is the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution we can easily sample.
+The process can be modeled with a Markov chain of (very) many additive Gaussian noise transitions. 
 
 $$\mathbf x \rightarrow \dots \rightarrow \mathbf z_s \rightarrow \dots \rightarrow \mathbf z_{t-1} \rightarrow \mathbf z_t \rightarrow z_{t+1} \rightarrow \dots \rightarrow \mathbf z_T$$
 
@@ -28,12 +28,12 @@ Therefore, the inference distribution factorizes as
 
 $$q(\mathbf z_{1:T}, \mathbf x) = q(\mathbf x) q(\mathbf z_1 \mid \mathbf x) \prod_{t=2}^T  q(\mathbf z_t | \mathbf z_{t-1}).$$
 
-We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic
+We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $\mathbf z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic
 [[We used the fact that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term with variance $\sigma_{t \mid t-1}^2$).::rsn]],
 
 $$\mathbf z_t \sim \mathcal{N}(\alpha_{t|t-1} \alpha_{t-1} \mathbf x,\, \alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I + \sigma^2_{t|t-1}\mathbf I)$$
 
-But we also know that $z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
+But we also know that $\mathbf z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
 
 $$\alpha_{t|t-1} \alpha_{t-1} \mathbf x = \alpha_t \mathbf x \iff \alpha_{t|t-1} = \frac{\alpha_t}{\alpha_{t-1}}$$
 
@@ -51,7 +51,7 @@ $$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] =
 
 that we rewrite to
 
-$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = \min D_{KL}(q(\mathbf z_T \mid \mathbf x) || p(\mathbf z_T))) + \mathbb{E}_{q(\mathbf z_1 \mid \mathbf x)} [- \log p(\mathbf x \mid \mathbf z_1)] + \mathcal{L}_D \tag{1},$$
+$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = \min \left[D_{KL}(q(\mathbf z_T \mid \mathbf x) || p(\mathbf z_T))) + \mathbb{E}_{q(\mathbf z_1 \mid \mathbf x)} [- \log p(\mathbf x \mid \mathbf z_1)] + \mathcal{L}_D\right] \tag{1},$$
 
 with
 
@@ -78,7 +78,7 @@ The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ a
 The obtained three terms form the loss function that we presented earlier.
 
 ## Analyzing The Divergence
-The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. The second term is a data likelihood term (e.g., reconstruction loss). The other terms form the "diffusion loss". These can also be rewritten in a way that we *only have to perform data reconstruction during training*.
+The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. The second term is a data likelihood term (e.g., reconstruction loss). The other terms form the "diffusion loss". These can also be rewritten so that we *only have to perform data reconstruction during training*.
 
 $$\begin{aligned}
 q(\mathbf z_{t-1}\mid \mathbf z_t, \mathbf x) &= \frac{q(\mathbf z_t \mid \mathbf z_{t-1}, \mathbf x)}{q(\mathbf z_t \mid \mathbf x)} \cdot q(\mathbf z_{t-1} \mid \mathbf x) \\
@@ -100,12 +100,11 @@ The reason why we performed all of these computations follows now. We have not p
 
 $$p_\theta(\mathbf z_{t-1} \mid \mathbf z_t) := q(\mathbf z_{t-1} \mid \mathbf z_t, \hat{\mathbf x}_\theta(\mathbf z_t; t))$$
 
-To see this, consider the paper's Appendix B Equations (34)-(40). However, since the KL-divergence between two Gaussianas involves a mean-squared error between the two means, it we see that 
+To see this, consider the paper's Appendix B Equations (34)-(40). However, since the KL-divergence between two Gaussianas involves a mean-squared error between the two means, we see that 
 
-$$D_{KL}\left[q(\mathbf z_{t-1}|\mathbf z_{t}, \mathbf x) || p_\theta(\mathbf z_{t-1}\mid \mathbf z_{t-1}) \right] = T + S \cdot \Vert \boldsymbol \mu_{t-1|t} -\hat{\boldsymbol \mu}_{t-1|t}\Vert^2_2 = \left(\frac{\alpha_{t-1} \sigma_{t|t-1}^2}{\sigma_t^2}\right)^2 \Vert \mathbf x - \hat{\mathbf x}_\theta(\mathbf z_t; t) \Vert^2_2,$$
+$$D_{KL}\left[q(\mathbf z_{t-1}|\mathbf z_{t}, \mathbf x) || p_\theta(\mathbf z_{t-1}\mid \mathbf z_{t-1}) \right] \approx \Vert \boldsymbol \mu_{t-1|t} -\hat{\boldsymbol \mu}_{t-1|t}\Vert^2_2 = \left(\frac{\alpha_{t-1} \sigma_{t|t-1}^2}{\sigma_t^2}\right)^2 \Vert \mathbf x - \hat{\mathbf x}_\theta(\mathbf z_t; t) \Vert^2_2,$$
 
-where $S$ and $T$ are scaling and additive terms that are omitted for conciceness.
-As such, we are just reconstructing $\mathbf x$.
+where have omitted some terms involving the variances for conciseness (hence the "$\approx$"). As such, we are just reconstructing $\mathbf x$.
 
 Furthermore, Since we know $\mathbf x$ and $\mathbf z_t$, our model can equivalently try to recover the additive noise through the relation:
 
@@ -113,10 +112,8 @@ $$\mathbf z_t = \alpha_t \mathbf x + \sigma_t \hat{\boldsymbol \epsilon}_\theta,
 
 which works better in practice.
 
-
-
 ## Continuous Time
-Note that we know $q(\mathbf z_t \mid \mathbf z_s)$ analytically for every $s$ < $t$, even when we use continuous time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. Adding the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon$), means that we can sample $t$ from a continuous interval and keep performing the reconstruction task. Only when we sample from the model we need to discretize (as shown later).
+Note that we know $q(\mathbf z_t \mid \mathbf z_s)$ analytically for every $s$ < $t$, even when we use continuous-time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. Adding the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon$) means that we can sample $t$ from a continuous interval and keep performing the reconstruction task. We need to discretize only when we sample from the model (as shown later).
 
 The diffusion loss, as shown in [Appendix B.3.](https://arxiv.org/abs/2107.00630), finally becomes
 
@@ -164,9 +161,9 @@ We have all the required ingredients to start coding. For our full code, click [
 
         return loss
 ```
-We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(\mathbf z_t|\mathbf z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise  using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here, as we put $q(\mathbf z_0\mid \mathbf x):=\delta(\mathbf x_0)$. 
+We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(\mathbf z_t|\mathbf z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here, as we put $q(\mathbf z_0\mid \mathbf x):=\delta(\mathbf x_0)$. 
 
-Let's now zoom in on `q_zt_zs`, the forward noising model.
+Now, let's zoom in on `q_zt_zs`, the forward noising model.
 
 ```python
     def q_zt_zs(self, zs, t, s=None):
@@ -199,14 +196,14 @@ Note that by putting $\alpha^2_t := \sigma(\gamma(t))$, where $\gamma$ is our le
 
 $$\sigma\left(\log \frac{\alpha^2}{\sigma^2}\right) = \frac{1}{1+e^{\log \sigma^2 / \alpha^2}} = \frac{1}{1+\sigma^2 / \alpha^2} = \frac{\alpha^2}{\sigma^2 + \alpha^2} = \alpha^2$$
 
-This is fine, as the authors show that the continuous time model is invariant to the noise schedule, and therefore also the absolute values. Only the signal-to-noise ratios of the begin and endpoints are important. 
+This is fine, as the authors show that the continuous-time model is invariant to the noise schedule and, therefore, also the absolute values. Only the signal-to-noise ratios of the beginning and endpoints are essential. 
 
 Then, in the code, we use the formulas for $\alpha^2_{t\mid s}$ that we derived earlier and return the mean and standard deviation (and a normalized log-SNR for the denoising model to condition on).
 
 That's it! More is not needed for training. The implementations for the denoising model (a UNet-type) and the SNRnet are given later. We first zoom in on how to sample from the model.
 
 ## Sampling
-Sampling from a diffusion model is easy, but requires much compute. We need to discretize the reverse dfifusion process and iterate through the process. 
+Sampling from a diffusion model is easy but requires much computation. We need to discretize the reverse diffusion process and iterate through the process. 
 
 $$\mathbf x \leftarrow \dots \leftarrow \mathbf z_{s} \leftarrow \dots \leftarrow \mathbf z_t \leftarrow \dots \leftarrow \mathbf z_T$$
 
@@ -233,7 +230,7 @@ I.e., we sample $\mathbf z_t \sim p(\mathbf z_T)$ and use our learned $p(\mathbf
         return img
 
 ```
-Here, we see that the number of time-steps is set by `self.num_timesteps` and $[0, 1]$ is simply split into this number of parts. 
+Here, we see that the number of time-steps is set by `self.num_timesteps`, and $[0, 1]$ is simply split into this number of parts. 
 
 ```python
     @torch.no_grad()
@@ -317,7 +314,7 @@ That concludes sampling!
 ## Remaining Bits
 Some final details are how the learned noise schedule is implemented and the specific model choices.
 
-In our code, we do not exactly follow what the authors propose but stick to the previous diffusion UNet-type architecture provided by the `Lucidrains` repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows (taken from the `revsic` repo).
+We do not strictly follow what the authors propose in our code but stick to the previous diffusion UNet-type architecture provided by the `Lucidrains` repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows (taken from the `revsic` repo).
 
 ```python
 class SNRNetwork(nn.Module):
@@ -367,7 +364,7 @@ class PositiveLinear(nn.Module):
 Again, for all details, see our full implementation [here](https://github.com/DavidRuhe/simple-variational-diffusion-models).
 
 ## Conclusion
-Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple and highly scalable they certainly have useful properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. Please don't hesitate to contact me if you have any questions or comments regarding the implementation, code or diffusion models in general!
+Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple, and highly scalable, they certainly have valuable properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. Please don't hesitate to contact me if you have any questions or comments regarding the implementation, code, or diffusion models in general!
 
 ## References
 #### ArXiV
