@@ -377,5 +377,6 @@ Denoising diffusion models have many potential applications. It remains to be se
 - [Rombach et al., 2021](https://arxiv.org/abs/2112.10752)
 
 #### GitHub
+- [DavidRuhe/simple-variational-diffusion-models](https://github.com/DavidRuhe/simple-variational-diffusion-models)
 - [revsic/jax-variational-diffwave](https://github.com/revsic/jax-variational-diffwave)
 - [Lucidrains/denoising-diffusion-pytorch](https://github.com/lucidrains/denoising-diffusion-pytorch)
