@@ -164,8 +164,7 @@ We have all the required ingredients to start coding. For our full code, click [
 
         return loss
 ```
-We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(z_t|z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise  using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here. Note that $q(\mathbf z_0\mid \mathbf x)$ is $\delta(\mathbf x_0)$ and we can then obtain zero likelihood loss.
-
+We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(\mathbf z_t|\mathbf z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise  using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here, as we put $q(\mathbf z_0\mid \mathbf x):=\delta(\mathbf x_0)$. 
 
 Let's now zoom in on `q_zt_zs`, the forward noising model.
 
@@ -196,11 +195,13 @@ Let's now zoom in on `q_zt_zs`, the forward noising model.
         return alpha_tbars * zs, sigma_tbars, norm_nlogsnr_t
 ```
 
-Note that by putting $\alpha^2_t := \sigma(\gamma(t))$, where $\gamma$ is our learned SNR schedule we keep $\alpha_t^2 + \sigma_t^2 = 1$. This is fine, as the authors show that the continuous time model is invariant to the noise schedule, and therefore also the absolute values. Only the signal-to-noise ratios of the begin and endpoints are important. Note that
+Note that by putting $\alpha^2_t := \sigma(\gamma(t))$, where $\gamma$ is our learned SNR schedule, we keep $\alpha_t^2 + \sigma_t^2 = 1$. 
 
 $$\sigma\left(\log \frac{\alpha^2}{\sigma^2}\right) = \frac{1}{1+e^{\log \sigma^2 / \alpha^2}} = \frac{1}{1+\sigma^2 / \alpha^2} = \frac{\alpha^2}{\sigma^2 + \alpha^2} = \alpha^2$$
 
-Then, we use the formulas for $\alpha^2_{t\mid s}$ that we and return the mean and standard deviation (and a normalized log-SNR for the denoising model to condition on).
+This is fine, as the authors show that the continuous time model is invariant to the noise schedule, and therefore also the absolute values. Only the signal-to-noise ratios of the begin and endpoints are important. 
+
+Then, in the code, we use the formulas for $\alpha^2_{t\mid s}$ that we derived earlier and return the mean and standard deviation (and a normalized log-SNR for the denoising model to condition on).
 
 That's it! More is not needed for training. The implementations for the denoising model (a UNet-type) and the SNRnet are given later. We first zoom in on how to sample from the model.
 
@@ -248,7 +249,7 @@ Here, we see that the number of time-steps is set by `self.num_timesteps` and $[
         return model_mean + nonzero_mask * model_variance.sqrt() * noise
 ```
 
-Next, we implement $p(\mathbf z_s \mid z_t)$. 
+Next, we implement $p(\mathbf z_s \mid \mathbf z_t)$. 
 
 ```python
     def p_zs_zt(self, zt, t, s, clip_denoised: bool):
@@ -288,7 +289,7 @@ Next, we implement $p(\mathbf z_s \mid z_t)$.
 
 We know that $$p(\mathbf z_s \mid \mathbf z_t) = q(\mathbf z_s \mid \mathbf z_t, \mathbf x=\hat{\mathbf x}_\theta(\mathbf z_t; t)).$$
 
-Our model outputs estimated noise and since $\mathbf z_t = \alpha_t \mathbf x + \sigma_t \mathbf \epsilon \iff \mathbf{x} = \frac{\mathbf z_t - \sigma_t \epsilon}{\alpha_t}$ we get (we shorthand $\hat{\mathbf x} := \hat{\mathbf x}_\theta(\mathbf z_t; t))$)
+Our model outputs estimated noise and since $\mathbf z_t = \alpha_t \mathbf x + \sigma_t \boldsymbol \epsilon \iff \mathbf{x} = \frac{\mathbf z_t - \sigma_t \epsilon}{\alpha_t}$ we get (we shorthand $\hat{\mathbf x} := \hat{\mathbf x}_\theta(\mathbf z_t; t))$)
 
 $$\begin{aligned}
 \hat{\mu}_{s \mid t} &= \frac{\alpha_{t\mid s} \sigma^2_s}{\sigma_t^2} \mathbf z_t + \frac{\alpha_s \sigma^2_{t\mid s}}{\sigma_t^2} \hat{\mathbf x} \\
@@ -300,7 +301,7 @@ $$\begin{aligned}
 
 This final line is what we coded. The variance remains the same as $q(\mathbf z_s \mid \mathbf z_t, \mathbf x)$.
 
-Finally, since $\mathbf x$ should be bounded between $[-1, 1]$, we know that $\hat{\epsilon}$ should also be bounded as 
+Finally, since $\mathbf x$ should be bounded between $[-1, 1]$, we know that $\hat{\boldsymbol \epsilon}$ should also be bounded as 
 
 $$\begin{aligned}
 &-1 \leq \mathbf x \leq 1\\
@@ -316,7 +317,7 @@ That concludes sampling!
 ## Remaining Bits
 Some final details are how the learned noise schedule is implemented and the specific model choices.
 
-In our code, we do not exactly follow what the authors propose but stick to the previous diffusion UNet-type architecture provided by the Lucidrains repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows
+In our code, we do not exactly follow what the authors propose but stick to the previous diffusion UNet-type architecture provided by the `Lucidrains` repository. The learned noise schedule (determined by the signal-to-noise ratios) is coded as follows (taken from the `revsic` repo).
 
 ```python
 class SNRNetwork(nn.Module):
@@ -367,3 +368,14 @@ Again, for all details, see our full implementation [here](https://github.com/Da
 
 ## Conclusion
 Denoising diffusion models have many potential applications. It remains to be seen how long diffusion models will be around as the go-to generative model. Being easy to train, conceptually simple and highly scalable they certainly have useful properties. But the relatively slow sampling procedure might be problematic. Despite this, I am optimistic. If you have any questions or comments regarding either the implementation, code or diffusion models in general!
+
+## References
+#### ArXiV
+- [Kingma et al., 2021](https://arxiv.org/abs/2107.00630)
+- [Ho et al., 2020](https://arxiv.org/abs/2006.11239)
+- [Song et al., 2021](https://arxiv.org/abs/2011.13456)
+- [Rombach et al., 2021](https://arxiv.org/abs/2112.10752)
+
+#### GitHub
+- [revsic/jax-variational-diffwave](https://github.com/revsic/jax-variational-diffwave)
+- [Lucidrains/denoising-diffusion-pytorch](https://github.com/lucidrains/denoising-diffusion-pytorch)
