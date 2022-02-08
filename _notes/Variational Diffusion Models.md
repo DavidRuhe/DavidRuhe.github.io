@@ -7,21 +7,20 @@ comments: true
 ---
 [[Note, this is still work in progress. If anything about the post or code is not clear, please let me know!::wrap]]
 ## Overview
-Generative models are statistical models that model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANS)](), [Normalizing Flows]() and [[Variational Autoencoder|Variational Autoencoders]]. The latter is an example of a [[Latent Variable Model]], where a data-point is encoded into a latent variable $\mathbf z$ that should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
+Generative models model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANs)](), [Normalizing Flows]() and [[Variational Autoencoder|Variational Autoencoders]]. The latter is an example of a [[Latent Variable Model]], where a data-point is encoded into a latent variable $\mathbf z$ that usually should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
 
-Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data-likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding directly the data to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
+Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding directly the data to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
 
 ![Figure 1](/assets/img/pgm_diagram_xarrow.png)
 
-In this post, we detail how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models]().
+In this post, we detail how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models](https://arxiv.org/abs/2107.00630).
 
 
 ## Model Development
-In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of eachother, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number on the interval $[0, 1]$ determines such an encoder as follows:
+In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of eachother, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
-where $\alpha_t$ and $\sigma_t$ are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum and $\mathbf z_t$ the encoded variable. As such, the encoding process simply adds Gaussian noise to our data with each time-step $t$. We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, when $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
-
-The process can be seen as a Markov chain of (very) many additive Gaussian noise transitions. 
+where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum and $\mathbf z_t$ the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
+The process can be modelled with a Markov chain of (very) many additive Gaussian noise transitions. 
 
 $$\mathbf x \rightarrow \dots \rightarrow \mathbf z_s \rightarrow \dots \rightarrow \mathbf z_{t-1} \rightarrow \mathbf z_t \rightarrow z_{t+1} \rightarrow \dots \rightarrow \mathbf z_T$$
 
@@ -40,22 +39,28 @@ $$\alpha_{t|t-1} \alpha_{t-1} \mathbf x = \alpha_t \mathbf x \iff \alpha_{t|t-1}
 
 $$\alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I  + \sigma^2_{t|t-1} \mathbf I   = \sigma^2_t \mathbf I \iff \sigma^2_{t|t-1}  = \alpha_{t|t-1}^2 \sigma^2_{t-1}  - \sigma^2_t$$
 
-Therefore, we also know analytically that 
+Therefore, we also know that 
 
 $$q(\mathbf z_t \mid \mathbf z_{t-1}) = \mathcal{N}(\alpha_{t|t-1} \mathbf z_{t-1}, \sigma_{t|t-1}\mathbf I)$$ 
 
 and we can directly compute the parameters from the known noise schedule parameters.
 
 Now, just like the [[Variational Autoencoder]], we simply minimize the relative entropy
+
 $$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = \mathbb{E}_{q(\mathbf x, \mathbf z_{1:T})} [\log q(\mathbf x, \mathbf z_{1:T}) - \log p(\mathbf x, \mathbf z_{1:T}))]$$
-Which we rewrite to
+
+that we rewrite to
+
 $$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = D_{KL}(q(\mathbf z_T \mid \mathbf x) || p(\mathbf z_T))) + \mathbb{E}_{q(\mathbf z_1 \mid \mathbf x)} [- \log p(\mathbf x \mid \mathbf z_1)] + \mathcal{L}_D \tag{1},$$
+
 with
+
 $$
 \mathcal{L}_D := \sum_{t=2}^T D_{KL}[q(\mathbf z_{t-1} \mid \mathbf z_t, \mathbf x)||p(\mathbf z_{t-1} \mid \mathbf z_t)] \tag{2}.
 $$
 
-This equality is not straightforward, but we include the derivation.
+This is derived as follows.
+
 $$\begin{aligned}
 \log q(\mathbf z_{1:T} | \mathbf x) - \log p(\mathbf z_{1:T}, \mathbf x) 
 &= -\log p(\mathbf z_T)- p(\mathbf x \mid \mathbf z_1) + q(\mathbf z_1 \mid \mathbf x) +  \sum_{t=2}^T \log q(\mathbf z_t|\mathbf z_{t-1}) - \log p(\mathbf z_{t-1}|\mathbf z_t) \\
@@ -65,6 +70,7 @@ $$\begin{aligned}
 \end{aligned}$$
 
 The second equality follows from Bayes' rule:
+
 $$q(\mathbf z_t \mid \mathbf z_{t-1}) \stackrel{\mathbf z_t \perp\!\!\perp \mathbf x \mid \mathbf z_{t-1}}{=} q(\mathbf z_t \mid \mathbf z_{t-1}, \mathbf x) = q(\mathbf z_{t-1} \mid \mathbf z_t, \mathbf x) \cdot \frac{q(\mathbf z_t \mid \mathbf x)}{q(\mathbf z_{t-1} \mid x)}.$$
 
 The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ and $q(\mathbf z_{t-1} \mid \mathbf x)$ cancel with each-other in the summation and with $q(\mathbf z_1 \mid \mathbf x)$ that was in front of it. Only $q(\mathbf z_T \mid \mathbf x)$ remains.
