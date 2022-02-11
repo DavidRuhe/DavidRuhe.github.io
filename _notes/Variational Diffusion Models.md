@@ -87,7 +87,7 @@ p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u} \math
 &= \Phi((\mathbf x + d_u - \mathbf z_1) / \sigma_1) - \Phi((\mathbf x - d_u - \mathbf z_1) / \sigma_1).
 \end{aligned}$$
 
-If we now take $\mathbf x \in \{0, \dots, 255\}^D$ then $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$, $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty, d_l = 0.5$ for $\mathbf x = 255$ divides the whole space into 256 parts that naturally add to 1.
+Now, $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$, $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty, d_l = 0.5$ for $\mathbf x = 255$ divide the whole space into 256 parts that naturally add to 1.
 
 The other terms form the "diffusion loss". These can also be rewritten so that we *only have to perform data reconstruction during training*.
 
