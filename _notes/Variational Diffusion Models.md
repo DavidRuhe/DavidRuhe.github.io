@@ -140,7 +140,7 @@ We left open the question how to set $\alpha_t$ and $\sigma_t$. So long as we st
 ## Implementation
 We have all the required ingredients to start coding. For our full code, click [here](https://github.com/DavidRuhe/simple-variational-diffusion-models). 
 
-First we implement the "prior loss" part of $(3)$ (but now using continuous time). Note that `gaussian_kl` by default is against a zero mean Gaussian.
+First we implement the "prior loss" part of $(3)$ (but now using continuous time, $t \in [0, 1]$). Note that `gaussian_kl` by default is against a zero mean Gaussian.
 
 ```python
     def prior_loss(self, x, batch_size):
