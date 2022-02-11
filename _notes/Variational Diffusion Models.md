@@ -78,7 +78,18 @@ The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ a
 The obtained three terms form the loss function that we presented earlier.
 
 ## Analyzing The Divergence
-The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. The second term is a data likelihood term (e.g., reconstruction loss). The other terms form the "diffusion loss". These can also be rewritten so that we *only have to perform data reconstruction during training*.
+The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. 
+
+The second term is a data likelihood term (e.g., reconstruction loss). Since, for images, $\mathbf x$ lives in a discrete space, but $q(\mathbf z_1 \mid \mathbf x)$ is a Gaussian and thus lives on the whole number line, we have to divide it into regions. We know that $\mathbf x$ has 256 distinct values, and hence we can choose
+
+$$\begin{aligned}
+p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u} \mathcal{N}(\mathbf x \mid \mathbf z_1, \sigma^2_1 \mathbf I) d \mathbf x \\
+&= \Phi((\mathbf x + d_u - \mathbf z_1) / \sigma_1) - \Phi((\mathbf x - d_u - \mathbf z_1) / \sigma_1).
+\end{aligned}$$
+
+If we now take $\mathbf x \in \{0, \dots, 255\}^D$ then $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$, $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty, d_l = 0.5$ for $\mathbf x = 255$ divides the whole space into 256 parts that naturally add to 1.
+
+The other terms form the "diffusion loss". These can also be rewritten so that we *only have to perform data reconstruction during training*.
 
 $$\begin{aligned}
 q(\mathbf z_{t-1}\mid \mathbf z_t, \mathbf x) &= \frac{q(\mathbf z_t \mid \mathbf z_{t-1}, \mathbf x)}{q(\mathbf z_t \mid \mathbf x)} \cdot q(\mathbf z_{t-1} \mid \mathbf x) \\
@@ -127,7 +138,39 @@ This loss function is a continuous version approximation of $(2)$, using Monte C
 We left open the question how to set $\alpha_t$ and $\sigma_t$. So long as we stick to the requirements (monotonicity), we can learn the noise schedule. To do so, we implement a monotonic neural network that takes a time-step $t$ and outputs a (log) signal-to-noise ratio $\alpha_t^2 / \sigma_t^2$.
 	
 ## Implementation
-We have all the required ingredients to start coding. For our full code, click [here](https://github.com/DavidRuhe/simple-variational-diffusion-models). Here, we implement the loss function $(3)$. 
+We have all the required ingredients to start coding. For our full code, click [here](https://github.com/DavidRuhe/simple-variational-diffusion-models). 
+
+First we implement the "prior loss" part of $(3)$ (but now using continuous time). Note that `gaussian_kl` by default is against a zero mean Gaussian.
+
+```python
+    def prior_loss(self, x, batch_size):
+        logsnr_1, _ = self.snrnet(torch.ones((batch_size,), device=x.device))
+        alpha_sq_1 = torch.sigmoid(logsnr_1)[:, None, None, None]
+        sigmasq_1 = 1 - alpha_sq_1
+        alpha_1 = alpha_sq_1.sqrt()
+        mu_1 = alpha_1 * x
+        return gaussian_kl(mu_1, sigmasq_1).sum() / batch_size
+```
+
+Next, the data likelihood. Since our $\mathbf x$ is scaled between $[-1, 1]$, we use $1 / 255$ instead of $0.5$ in the integration boundary. From $-1$ and $1$ we integrate to $-\infty$ and $\infty$, respectively. Since the CDF is 0 and $1$ for these ranges we can fill those values directly.
+
+```python
+    def data_likelihood(self, x, batch_size):
+        logsnr_0, _ = self.snrnet(torch.zeros((1,), device=x.device))
+        alpha_sq_0 = torch.sigmoid(logsnr_0)[:, None, None, None].repeat(*x.shape)
+        sigmasq_0 = 1 - alpha_sq_0
+        alpha_0 = alpha_sq_0.sqrt()
+        mu_0 = alpha_0 * x
+        sigma_0 = sigmasq_0.sqrt()
+        d = 1 / 255
+        p_x_z0 = standard_cdf((x + d - mu_0) / sigma_0) - standard_cdf((x - d - mu_0) / sigma_0)
+        p_x_z0[x == 1] = 1 - standard_cdf((x[x == 1] - d - mu_0[x == 1]) / sigma_0[x == 1])
+        p_x_z0[x == -1] = standard_cdf((x[x == -1] + d - mu_0[x == -1]) / sigma_0[x == -1])
+        nll = -torch.log(p_x_z0)
+        return nll.sum() / batch_size
+```
+
+Third, we implement the most important part: the diffusion loss, along with the overall loss function $(3)$. 
 ```python
     def get_loss(self, x):
 
@@ -152,16 +195,14 @@ We have all the required ingredients to start coding. For our full code, click [
             * F.mse_loss(e, e_hat, reduction="none").sum(dim=(1, 2, 3))
         )
         diffusion_loss = diffusion_loss.sum() / batch_size
+        prior_loss = self.prior_loss(x, batch_size)
+        data_loss = self.data_likelihood(x, batch_size)
 
-        mu_z1_x, sigma_z1_x, _ = self.q_zt_zs(zs=x, t=torch.ones_like(t))
-        prior_kl = gaussian_kl(mu_z1_x, sigma_z1_x)
-        prior_loss = prior_kl.sum() / batch_size
-
-        loss = diffusion_loss + prior_loss
+        loss = diffusion_loss + prior_loss + data_loss
 
         return loss
 ```
-We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(\mathbf z_t|\mathbf z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. Also, we compute the prior loss as a Gaussian KL at $t=1$. Note that we *omit* the likelihood here, as we put $q(\mathbf z_0\mid \mathbf x):=\delta(\mathbf x_0)$. 
+We sample time-steps between $t \in [0, 1]$. Then, we sample from the diffusion process $q(\mathbf z_t|\mathbf z_s)$. Remember that, as we have shown above ("Model Development"), we can sample from these directly in terms of the parameters $\alpha_t$ and $\sigma_t$ and input $x$. We sample using reparameterization and reconstruct the noise using `denoise_fn`, which we will discuss later. Furthermore, in $(3)$ we see that we need a derivative of the log-signal-to-noise ratio. Since we implemented this schedule with a neural network, we compute it using autograd. Finally, we compute the diffusion loss. It's multiplied with $-0.5$ since our SNR network is monotonically increasing instead of decreasing. 
 
 Now, let's zoom in on `q_zt_zs`, the forward noising model.
 
