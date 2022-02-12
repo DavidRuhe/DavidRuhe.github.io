@@ -1,6 +1,6 @@
 ---
 title: "Variational Diffusion Models"
-season: winter
+season: summer
 tags: blog generative_models diffusion
 toc: false
 comments: true
