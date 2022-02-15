@@ -19,7 +19,7 @@ This post details how the models are formally developed and provide [a simple im
 ## Model Development
 In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of each other, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
-where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum, and $\mathbf z_t$ is the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution we can easily sample.
+where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum, and $\mathbf z_t$ is the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
 The process can be modeled with a Markov chain of (very) many additive Gaussian noise transitions. 
 
 $$\mathbf x \rightarrow \dots \rightarrow \mathbf z_s \rightarrow \dots \rightarrow \mathbf z_{t-1} \rightarrow \mathbf z_t \rightarrow z_{t+1} \rightarrow \dots \rightarrow \mathbf z_T$$
@@ -78,7 +78,7 @@ The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ a
 The obtained three terms form the loss function that we presented earlier.
 
 ## Analyzing The Divergence
-The first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. 
+In eq. $(1)$ the first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. 
 
 The second term is a data likelihood term (e.g., reconstruction loss). Since, for images, $\mathbf x$ lives in a discrete space, but $q(\mathbf z_1 \mid \mathbf x)$ is a Gaussian and thus lives on the whole number line, we have to divide it into regions. We know that $\mathbf x$ has 256 distinct values, and hence we can choose
 
@@ -111,11 +111,12 @@ The reason why we performed all of these computations follows now. We have not p
 
 $$p_\theta(\mathbf z_{t-1} \mid \mathbf z_t) := q(\mathbf z_{t-1} \mid \mathbf z_t, \hat{\mathbf x}_\theta(\mathbf z_t; t))$$
 
-To see this, consider the paper's Appendix B Equations (34)-(40). However, since the KL-divergence between two Gaussianas involves a mean-squared error between the two means, we see that 
+Since the KL-divergence between two Gaussianas involves a mean-squared error between the two means, we see that 
 
 $$D_{KL}\left[q(\mathbf z_{t-1}|\mathbf z_{t}, \mathbf x) || p_\theta(\mathbf z_{t-1}\mid \mathbf z_{t-1}) \right] \approx \Vert \boldsymbol \mu_{t-1|t} -\hat{\boldsymbol \mu}_{t-1|t}\Vert^2_2 = \left(\frac{\alpha_{t-1} \sigma_{t|t-1}^2}{\sigma_t^2}\right)^2 \Vert \mathbf x - \hat{\mathbf x}_\theta(\mathbf z_t; t) \Vert^2_2,$$
 
 where have omitted some terms involving the variances for conciseness (hence the "$\approx$"). As such, we are just reconstructing $\mathbf x$.
+For all details, consider the paper's Appendix B Equations (34)-(40).
 
 Furthermore, Since we know $\mathbf x$ and $\mathbf z_t$, our model can equivalently try to recover the additive noise through the relation:
 

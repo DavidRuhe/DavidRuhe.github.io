@@ -3,5 +3,6 @@
   "newFileFolderPath": "_notes",
   "newLinkFormat": "relative",
   "attachmentFolderPath": "assets/img",
-  "vimMode": true
+  "vimMode": true,
+  "promptDelete": false
 }
