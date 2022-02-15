@@ -9,8 +9,8 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "_notes/Variational Diffusion Models.md",
-            "mode": "preview"
+            "file": "about.md",
+            "mode": "source"
           }
         }
       }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "_notes/Variational Diffusion Models.md",
+                "file": "about.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,9 +88,9 @@
   },
   "active": "20ee3dd398224c8d",
   "lastOpenFiles": [
-    "_notes/Variational Diffusion Models.md",
-    "_other/Interview Prep.md",
     "about.md",
+    "_other/Interview Prep.md",
+    "_notes/Variational Diffusion Models.md",
     "_notes/Untitled.md",
     "_notes/Detecting Dispersed Radio Transients in Real Time Using Convolutional Neural Networks.md",
     "_notes/End-to-End Weak Supervision.md",

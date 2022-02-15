@@ -166,18 +166,20 @@ Binomial: probability of N heads.
 LLN: sample expectations converge to true expectations.
 CLT: if we repeatedly sample datasets from a distribution, then the means will tend to a normal distribution. Truly normal if the sizes of the datasets grows to infinity.
 
-# Read Johannes' work & Connect it & Alphafold.
-
 # Interest in Molecule research.
+Drug design & catalyst design for e.g. green energy.
 
-
-# Graph Neural Networks
 
 # Behavioral
  - Tell me about a time when you felt something could be improved in a process, how did you go about changing it?
+	 - Band -> wekelijks een idee presenteren.
  - Tell me about a time when you felt your idea was better than the one proposed by others, what did you do to convince them?
+	 - Explain why, and ask them to give it a chance, potentially leading the way. Also band.
  - Tell me about a time when you made a mistake, how did you go about rectifying it?
+	 - 
 
+# Why Microsoft?
+All the big 5 companies have extremely competent researchers to work with. So they won't differ at that point. Among all, Microsoft has a very good track record regarding privacy and taking care of employees (compared to e.g. Facebook or Amazon). Also, Microsoft has really been pushing for open source software, which I appreciate as a developer.
 
 # Why Microsoft (Research Amsterdam)?
 I'm part of AI4Science in AMLab, we are interested in conducting AI research for the sciences, both applicative and fundamental. My personal project focuses on AI for radio astronomy, but I'm also involved with the other projects and AI for science in general. 
@@ -193,9 +195,22 @@ Field not ready yet in terms of data.
 The bias error is an error from erroneous assumptions in the learning algorithm. High bias can cause an algorithm to miss the relevant relations between features and target outputs (**underfitting**).
 The variance is an error from sensitivity to small fluctuations in the training set. High variance may result from an algorithm modeling the random noise in the training data (**overfitting**).
 
-# Strenghts
-
+# Strengths
+- Quick independent learner. 
+- Practical mindset (quick to go to action). 
 
 # Weaknesses
+- Being in the center of attention (presenting and sharing work).
+- (If asked another one) overthinking during communication.
 
 # Questions for Microsoft.
+- Will I work with you? 
+- Is there an order of research goals? If so, what first?
+- Your research ambitions?
+
+# Limitations and extensions of my papers.
+- SSI:
+	- Linear emission. Noise is always independent zero mean. Structural errors need supervision to correct. But one could also argue that then the measurement device is biased and should be worked on first.
+	- In the case of nonlinear emission or nonlinear transition expert estimates we can solve this by using techniques from Extended Kalman filter.
+- Transients:
+	- Naive inference approach. Could focus on more flexible posteriors.
