@@ -46,3 +46,4 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 I enjoy [[bouldering::https://en.wikipedia.org/wiki/Bouldering]] and recording music.
 I co-organise the [[AI4Science Colloquium.::https://ai4science-amsterdam.github.io/colloquium/]], where we regularly invite established researchers to present their work on the intersection between AI and science.
 
+# Calculating Eigenvectors & Eigenvalues

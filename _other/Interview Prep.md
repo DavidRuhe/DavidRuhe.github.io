@@ -172,9 +172,9 @@ Drug design & catalyst design for e.g. green energy.
 
 # Behavioral
  - Tell me about a time when you felt something could be improved in a process, how did you go about changing it?
-	 - Band -> wekelijks een idee presenteren.
+	 - Patrick wiskundig paper.
  - Tell me about a time when you felt your idea was better than the one proposed by others, what did you do to convince them?
-	 - Explain why, and ask them to give it a chance, potentially leading the way. Also band.
+	 - Patrick wiskundig paper.
  - Tell me about a time when you made a mistake, how did you go about rectifying it?
 	 - 
 
@@ -214,3 +214,27 @@ The variance is an error from sensitivity to small fluctuations in the training 
 	- In the case of nonlinear emission or nonlinear transition expert estimates we can solve this by using techniques from Extended Kalman filter.
 - Transients:
 	- Naive inference approach. Could focus on more flexible posteriors.
+	
+	
+# Why me?
+- I'm very curious, therefore intersted in developing AI for several domains.
+- AI4Science in AMLab and other scientific projects.
+- Enthusiastic about the opportunities in AI for molecular research.
+
+# Are you an expert in some area?
+- Machine learning, and perhaps AI4Science in general. Having worked in many different fields show that I'm highly curious. 
+- I do not have a very strong background on a single thing due to this curiosity to explore. 
+- Despite this, I've shown that through ML expertise I can have impact in the sciences.
+- This is similar to others in AMLab (e.g., Victor). Not being a huge expert also changes your way of thinking and perhaps guides you to less involved, more general solutions.
+
+
+# What do you add to a team?
+- Practical mindset. Once I'm convinced by an idea I'm not shy to just start and work on it. Then sometimes I can have some results a week later.
+- Enthusiasm about a project. If I feel like a project gets on track, I'm usually the latest to leave work.
+
+
+# Ideas
+- Domain to domain transfer for transferring (molecular) simulations to observations (e.g. toxicity, biological activation, spectroscopy) or transferring low-quality simulations to higher quality.
+
+
+
