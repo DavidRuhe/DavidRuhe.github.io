@@ -59,7 +59,7 @@ $$
 \mathcal{L}_D := \sum_{t=2}^T \mathbb{E}_{q(\mathbf z_t \mid \mathbf x)} \left[ D_{KL}[q(\mathbf z_{t-1} \mid \mathbf z_t, \mathbf x)||p(\mathbf z_{t-1} \mid \mathbf z_t)]\right] \tag{2}.
 $$
 
-Note that we can replace sampling through the Markov chain by directly sampling conditioned on $\mathbf x$. The distributions inside the Kullback-Leibler term are derived as follows.
+Note that we can replace sampling through the Markov chain by directly sampling conditioned on $\mathbf x$. These terms are derived as follows.
 
 $$\begin{aligned}
 \log q(\mathbf z_{1:T} | \mathbf x) - \log p(\mathbf z_{1:T}, \mathbf x) 
