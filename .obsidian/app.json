@@ -4,5 +4,6 @@
   "newLinkFormat": "relative",
   "attachmentFolderPath": "assets/img",
   "vimMode": true,
-  "promptDelete": false
+  "promptDelete": false,
+  "legacyEditor": true
 }
