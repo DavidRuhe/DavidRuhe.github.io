@@ -1,6 +1,6 @@
 ---
 title: End-to-End Weak Supervision
-season: spring
+season: winter
 tags: paper_summary weakly_supervised_learning
 toc: false
 comments: true
