@@ -1,4 +1,4 @@
---
+---
 title: "Variational Diffusion Models"
 season: summer
 tags: blog generative_models diffusion
