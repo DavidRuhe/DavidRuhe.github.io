@@ -8,9 +8,9 @@ toc: false
 
 ![personal_photo](/assets/img/CrhnTql4_400x400.jpeg)
 
-I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. I work on developing new machine learning algorithms that can help solve radio-astronomical research questions. My current interests are scientific machine learning, physics-inspired machine learning, inverse problems, generative models and self-supervised inference. My CV can be found [here](https://docs.google.com/document/d/1A2zTTm_YS-8_4jhV7gKkmpMihS4xB0uUKcb3nR1Js6c/edit?usp=sharing).
+I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (AMLab)::https://amlab.science.uva.nl/]] and the [[AI4Science::https://ai4science-amsterdam.github.io/]] lab. I work on developing new machine learning algorithms that can help solve scientific research questions. My current interests are scientific machine learning, physics-inspired machine learning, inverse problems, generative models and self-supervised inference. My CV can be found [here](https://docs.google.com/document/d/1A2zTTm_YS-8_4jhV7gKkmpMihS4xB0uUKcb3nR1Js6c/edit?usp=sharing).
 
-## Education
+%%## Education
 
 * PhD. Machine Learning (2020 - 2024) University of Amsterdam
     * Supervisors: Patrick Forre, Antonia Rowlinson, Max Welling, Ralph Wijers
@@ -44,6 +44,4 @@ I'm David, a second-year Ph.D. student in the [[Amsterdam Machine Learning Lab (
 
 ## Personal
 I enjoy [[bouldering::https://en.wikipedia.org/wiki/Bouldering]] and recording music.
-I co-organise the [[AI4Science Colloquium.::https://ai4science-amsterdam.github.io/colloquium/]], where we regularly invite established researchers to present their work on the intersection between AI and science.
-
-# Calculating Eigenvectors & Eigenvalues
+I co-organise the [[AI4Science Colloquium.::https://ai4science-amsterdam.github.io/colloquium/]], where we regularly invite established researchers to present their work on the intersection between AI and science.e the [[AI4Science Colloquium.::https://ai4science-amsterdam.github.io/colloquium/]], where we regularly invite established researchers to present their work on the intersection between AI and science.
