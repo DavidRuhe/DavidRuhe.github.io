@@ -5,7 +5,7 @@ tags: blog generative_models diffusion
 toc: false
 comments: true
 ---
-[[Note, this is still work in progress. If anything about the post or code is not clear, please let me know!::wrap]]
+[[January 2022. Note, this is still work in progress. If anything about the post or code is not clear, please let me know!::wrap]]
 ## Overview
 Generative models model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANs)](), [Normalizing Flows]() and [[Variational Autoencoder|Variational Autoencoders]]. The latter is an example of a [[Latent Variable Model]], where a data-point is encoded into a latent variable $\mathbf z$ that usually should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
 
