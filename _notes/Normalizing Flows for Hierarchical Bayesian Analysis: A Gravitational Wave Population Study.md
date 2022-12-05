@@ -12,6 +12,8 @@ We propose parameterizing the population distribution of the gravitational wave 
 
 [[Paper Link::https://arxiv.org/abs/2211.09008]]
 
+[[Video Link::https://twitter.com/djjruhe/status/1598375729946890240?s=20&t=6TIUzIq56Xc7wn-PrGw-ow]]
+
 Co-authors: Kaze Wong, Miles Cranmer, and Patrick Forré.
 ##### In Layman's Terms
 When [LIGO](https://en.wikipedia.org/wiki/LIGO) and [VIRGO](https://en.wikipedia.org/wiki/Virgo_interferometer) make gravitational wave detections (denoted $\{x_i\}$), they perform inference to obtain the associated physics parameters $\{\theta_i^j}$. Typical parameters include the masses of the binary merger, spins, and redshift. Compared to the raw data $\{x_i\}$, these parameters are *interpretable*. However, there is much uncertainty about their values. After all: the event has happened millions of lightyears away, and our measurement devices are not precise enough to precisely measure the masses, spins, etc. Still, by royally sampling the posterior distribution $q(\theta|x_i)$, we get a good grasp of the interval in which these parameters probably live.
