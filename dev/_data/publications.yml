@@ -1,0 +1,32 @@
+- image: "/assets/images/cgenn.png"
+  title: "Clifford Group Equivariant Neural Networks"
+  subtitle: "Transcending dimensions using steerable Clifford-equivariant networks."
+  authors: "David Ruhe, Johannes Brandstetter, Patrick Forr\u00E9"
+  link: "https://arxiv.org/abs/2305.11141"
+
+- image: "/assets/images/gcan.png"
+  title: "Geometric Clifford Algebra Networks (ICML 2023)"
+  subtitle: "Incorporating geometry into neural network transformations."
+  authors: "David Ruhe, Jayesh K. Gupta, Steven de Keninck, Max Welling, Johannes Brandstetter"
+  link: "https://arxiv.org/abs/2302.06594"
+
+- image: "/assets/images/ssi-figure1.png"
+  title: "Self-Supervised Inference in State-Space Models (ICLR 2022)"
+  subtitle: "Learning Kalman filters with physics-informed models."
+  authors: "David Ruhe, Patrick Forr\u00E9"
+  link: "https://arxiv.org/abs/2107.13349"
+
+- image: "/assets/images/pm1.png"
+  title: "Normalizing Flows for Hierarchical Bayesian Analysis (ML4PHYS 2022)"
+  subtitle: "Inferring gravitational wave parameters using normalizing flows."
+  authors: "David Ruhe, Kaze Wong, Miles Cranmer, Patrick Forr\u00E9"
+  link: "https://arxiv.org/abs/2211.09008"
+
+- image: "/assets/images/transients-figure1.png"
+  title: "Detecting Dispersed Radio Transients Using Convolutional Neural Networks (ASCOM)"
+  subtitle: "Using neural networks to find high-energy events in the deep radio universe."
+  authors: "David Ruhe, Mark Kuiack, Antonia Rowlinson, Ralph Wijers, Patrick Forr\u00E9"
+  link: "https://arxiv.org/abs/2103.15418"
+
+
+

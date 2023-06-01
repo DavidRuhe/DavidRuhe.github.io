@@ -1,0 +1,156 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "minima";
+
+.has-jax {
+  text-align: center;
+  margin: 1em 0em;
+}
+
+.section-hr {
+  margin: 32px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+  height: 1px;
+  border: 0px;
+}
+
+// .header-social a {
+//     color: #111;
+//     margin-right: 32px;
+//     font-size: 1em;
+//     font-weight: 400;
+//     text-decoration: none;
+//     transition: color 0.2s ease-in-out;
+// }
+
+// .header-social {
+//     display: inline-flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 54px;
+// }
+
+.page-link.social-icon {
+  font-size: 32px; 
+}
+
+
+.page-link.social-icon:hover {
+  text-decoration: none; 
+}
+
+
+
+.footer-social {
+    text-align: center;
+}
+
+.footer-social a {
+    color: #111;
+    margin-right: 32px
+}
+
+#about-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  #about-section .description, .about-section .personal-info {
+    width: 50%;
+    padding-right: 20px;
+
+  }
+  
+  #about-section .personal-info {
+    text-align: center;
+  }
+  
+  #about-section .personal-info h1 {
+    font-size: 64px;
+    margin-bottom: 0px;
+  }
+
+  #about-section .personal-info img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  #about-section .personal-info p {
+    margin-top: 10px;
+  }
+
+  .svg-icon-large {
+    transform: scale(2);
+    fill: black;
+  }
+
+  .publication {
+    display: flex;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+  
+  .publication-image {
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #000000; /* change color and width as needed */
+  }
+
+  .publication-image img {
+    object-fit: cover;
+    object-position: center;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .publication-info {
+    flex-grow: 1;
+    padding-top: 16px;
+  }
+
+  .publication-info h3 {
+    font-style: italic;
+  }
+
+  // .include-content {
+  //   margin-top: 32px;
+  //   margin-bottom: 64px;
+  // }
+
+  .publication_a {
+    font-size: 32;
+  }
+
+  .publication_span {
+    font-size: 128px;
+    background-color: red;
+  }
+
+  #cv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 256px;
+  }
+  
+  .cv-button {
+    display: inline-block;
+    padding: 16px 32px;
+    font-size: 24px;
+    text-decoration: none;
+    color: #000;
+    border-radius: 8px;
+    border: 1px solid #000;
+  }
+
+.cv-button:hover {
+  text-decoration: none;
+}

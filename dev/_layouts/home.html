@@ -1,0 +1,53 @@
+---
+layout: default
+---
+
+<div class="home">
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+
+  {% include about.html %}
+
+  <hr class="section-hr">
+
+  <div id="posts">
+    <!-- <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2> -->
+    <h2>Posts</h2>
+    <ul class="post-list">
+      {%- for post in site.posts -%}
+      <li>
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        <h3>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        </h3>
+        {%- if site.show_excerpts -%}
+          {{ post.excerpt }}
+        {%- endif -%}
+      </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <hr class="section-hr">
+
+  <div id="publications">
+  <h2>Selected Publications</h2>
+  {% include publications.html %}
+  <hr class="section-hr">
+  </div>
+
+  {% include cv.html %}
+
+  <hr class="section-hr">
+
+  {% include twitter.html %}
+
+
+</div>
