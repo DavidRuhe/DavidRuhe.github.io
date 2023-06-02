@@ -3,7 +3,7 @@ layout: post
 title: "Variational Diffusion Models"
 comments: true
 date:   2022-01-01 00:00:00 +0200
-excerpt: An exploration of denoising diffusion models using the influential paper by Kingma et al. as a primary resource. It specifically interprets these models as maximizers of the Evidence Lower Bound (ELBO). The post also includes a code implementation.
+excerpt: An exploration of denoising diffusion models using the paper "Variational Diffusion Models" by Kingma et al. (2021). It interprets these models as maximizers of the Evidence Lower Bound (ELBO) or, equivalently, as minimizers of the Kullback-Leibler divergence between the data and model distributions. A code implementation is also included. 
 ---
 > January 2022. Note, this is still work in progress. If anything about the post or code is not clear, please let me know!
 
