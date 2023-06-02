@@ -1,0 +1,21 @@
+<!-- {%- if site.facebook_username -%}<a href="https://www.facebook.com/{{ site.facebook_username| cgi_escape | escape }}" ><span class="username">{{ site.facebook_username| escape }}</span></a>{%- endif -%}
+{%- if site.flickr_username -%}<a href="https://www.flickr.com/photos/{{ site.flickr_username| cgi_escape | escape }}" ><span class="username">{{ site.flickr_username| escape }}</span></a>{%- endif -%} -->
+<!-- {%- if site.github_username -%}<a href="https://github.com/{{ site.github_username| cgi_escape | escape }}" ><span class="username">{{ site.github_username| escape }}</span></a>{%- endif -%} -->
+
+<a href="{{ site.baseurl }}/" class="page-link fa fa-home social-icon"></a>
+
+{%- if site.scholar_page -%}<a href="{{ site.scholar_page }}" class="page-link fa fa-graduation-cap social-icon"></a>{%- endif -%}
+{%- if site. -->github_username -%}<a href="https://github.com/{{ site.github_username| cgi_escape | escape }}" class="page-link fa fa-github social-icon"></a>{%- endif -%}
+<!-- {%- if site.github_username -%}<a href="https://github.com/{{ site.github_username| cgi_escape | escape }}" ><ion-icon size="large" name="logo-github"></ion-icon></a>{%- endif -%} -->
+<!-- {%- if site.instagram_username -%}<a href="https://instagram.com/{{ site.instagram_username| cgi_escape | escape }}" ><span class="username">{{ site.instagram_username| escape }}</span></a>{%- endif -%} -->
+    {%- if site.linkedin_username -%}<a href="https://www.linkedin.com/in/{{ site.linkedin_username| cgi_escape | escape }}" class="social-icon page-link fa fa-linkedin"></a>{%- endif -%}
+<!-- {%- if site.pinterest_username -%}<a href="https://www.pinterest.com/{{ site.pinterest_username| cgi_escape | escape }}" ><span class="username">{{ site.pinterest_username| escape }}</span></a>{%- endif -%} -->
+<!-- {%- for mst in site.mastodon -%}{%- if mst.username and mst.instance -%}<a href="https://{{ mst.instance| cgi_escape | escape}}/@{{mst.username}}" ><span class="username">{{ mst.username|escape }}</span></a>{%- endif -%}{%- endfor -%} -->
+{%- if site.twitter_username -%}<a href="https://www.twitter.com/{{ site.twitter_username| cgi_escape | escape }}" class="social-icon page-link fa fa-twitter"></a>{%- endif -%}
+{%- if site.email -%}<a href="mailto:{{ site.email }}" class="social-icon page-link fa fa-envelope"></a>{%- endif -%}
+<!-- <a href="" class="social-icon page-link fa fa-mail"></a> -->
+<!-- {%- if site.youtube_username -%}<a href="https://youtube.com/{{ site.youtube_username| cgi_escape | escape }}" ><span class="username">{{ site.youtube_username| escape }}</span></a>{%- endif -%} -->
+<!-- {%- if site.googleplus_username -%}<a href="https://plus.google.com/{{ site.googleplus_username| escape }}" ><span class="username">{{ site.googleplus_username| escape }}</span></a>{%- endif -%} -->
+<!-- {%- if site.rss -%}<a href="{{ 'feed.xml' | relative_url }}" ><span>{{ site.rss | escape }}</span></a>{%- endif -%} -->
+<!-- {%- if site.twitter_username -%}<a href="https://www.twitter.com/{{ site.twitter_username| cgi_escape | escape }}"><svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#twitter' | relative_url }}"></use></svg></a>{%- endif -%} -->
+
