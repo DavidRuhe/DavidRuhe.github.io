@@ -41,6 +41,10 @@
 .footer-social a {
     color: #111;
     margin-right: 32px;
+
+    @include media-query($on-palm){
+      margin-right: 16px;
+    }
 }
 
 @include media-query($on-palm){
@@ -64,6 +68,7 @@
 
 .post-list li p {
   font-size: 14px;
+  text-align: justify;
 }
 
 #about-section {
