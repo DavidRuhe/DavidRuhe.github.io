@@ -21,7 +21,7 @@
 title: David Ruhe
 email: d.ruhe@uva.nl
 description: >- # this means to ignore newlines until "baseurl:"
-  Ph.D. Student at the University of Amsterdam
+  David Ruhe - Ph.D. Student at the University of Amsterdam
 about: >-
   I am a fourth-year Ph.D. student in the <a href="http://amlab.science.uva.nl">Amsterdam Machine Learning Lab (AMLab)</a> and the <a href="https://ai4science-amsterdam.github.io">AI4Science</a> lab of the University of Amsterdam. I work on developing new machine learning algorithms that can help solve scientific research questions. My current interests are scientific machine learning, physics-inspired machine learning, inverse problems, generative models and self-supervised inference.
 baseurl: "" # the subpath of your site, e.g. /blog
