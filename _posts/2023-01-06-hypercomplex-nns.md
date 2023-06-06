@@ -11,14 +11,14 @@ excerpt: This is a first post discussing a recent series of papers that build up
 
 <figure> 
   <img src="/assets/images/complex-quaternion/header.png">
-  <figcaption>Left: complex neural network with real part (yellow) and imaginary part (red). Right: quaternion neural network with real part in yellow, and imaginary parts in red, blue, and green. Note: though regarded as crucial advantage of these architectures, the interconnectivity between the components of these is not shown to avoid cluttering.</figcaption>
+  <figcaption>Left: complex neural network with real part (yellow) and imaginary part (red). Right: quaternion neural network with real part in yellow, and imaginary parts in red, blue, and green. Note: though regarded as a crucial advantage of these architectures, the interconnectivity between the numbers' components is not shown to avoid cluttering.</figcaption>
 </figure>
 
 # Introduction
-Complex and quaternion numbers add depth to our numerical representations with their additional dimensions, enabling them to encapsulate more information, more efficiently. By nature, they are better equipped at representing phenomena that involve both magnitude and phase (such as electromagnetic waves), or three-dimensional rotations.
+Complex and quaternion numbers add depth to our numerical representations with their additional dimensions, enabling them to encapsulate more information more efficiently. By nature, they are better equipped to represent phenomena that involve both magnitude and phase (such as electromagnetic waves), or three-dimensional rotations.
 
 This shift in perspective is not just a simple change in the data representation. It paves the way for more advanced neural network architectures.
-This post serves as a first step in a series that explore these, called *Complex To Clifford*.
+This post serves as a first step in a series that explores these, called *Complex To Clifford*.
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a universe of geometrically inspired learning models. Finally, we will culminate in the exploration of equivariant Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain invariances.
 
@@ -40,7 +40,7 @@ Complex- and quaternion-valued neural networks offer several unique advantages c
 Here, we list a few of those.
 
 - Richer Representations. Complex- and quaternion-valued neural networks can provide richer representations and transformations. For instance, complex numbers can naturally model phenomena characterized by both magnitude and phase, such as waves in physics, electrical signals, etc. Quaternion numbers, which extend complex numbers by adding two more imaginary parts, are highly effective in representing rotations in 3D space, which can be valuable for computer graphics, robotics, and more. 
-- Neuron coupling. Similarly to the idea of [Capsule Networks](https://arxiv.org/abs/1710.09829), incorporating complex or higher-order numbers in neural networks allow neurons to be coupled in very specific and meaningful way. In this sense, the neural network can capture more than just an activation value in its representations, but also things like part-whole relations.
+- Neuron coupling. Similarly to the idea of [Capsule Networks](https://arxiv.org/abs/1710.09829), incorporating complex or higher-order numbers in neural networks allow neurons to be coupled in a precise and meaningful way. In this sense, the neural network can capture more than just an activation value in its representations but also things like part-whole relations.
 - Efficiency. The interplay within the neurons is fixed by the algebraic rules of (hyper)complex multiplication. By doing so, we get fully-connected layers without learning a full weight matrix. This can yield significant savings in memory and computational costs. 
 - Better Generalization. Some studies have shown that quaternion-valued networks may generalize better to unseen data. The potential for better generalization is attributed to the fact that the quaternion algebra captures more inherent correlations in the data, which might be missed by the real-valued models.
 
@@ -64,26 +64,27 @@ Operations with complex numbers are defined in terms of operations with real num
 #### Quaternions
 Quaternions extend the idea of complex numbers into four dimensions. They are typically denoted by the symbol $\mathbb{H}$. A quaternion number is generally represented as $q = a + bi + cj + dk$, where $a, b, c$, and $d$ are real numbers, and $i, j$, and $k$ are the *quaternion units*. They follow the rules: $i^2 = j^2 = k^2 = ijk = -1$.
 
+Adding quaternions, similarly to complex numbers, goes component-wise.
 Multiplication of quaternions is non-commutative; that is, the order of the factors changes the result. The product of two quaternions $p = a + bi + cj + dk$ and $q = e + fi + gj + hk$ is given by:
 
 $$\begin{aligned}
 pq &= ae - bf - cg - dh \\ &+ (af + be + ch - dg)i \\&+ (ag - bh + ce + df)j \\&+ (ah + bg - cf + de)k
 \end{aligned}$$
 
-The most famous application of quaternions is that they can be used to represent rotations in three dimensions more effectively and intuitively than other methods such as rotation matrices or Euler angles.
+The most famous application of quaternions is that they can be used to represent rotations in three dimensions more effectively and intuitively than other methods, such as rotation matrices or Euler angles.
 
-Hamilton's crucial discovery to model three-dimensional rotations was not to extend complex numbers to three, but to four dimensions.
-During this flash of inspiration, he was walking along the Royal Canal in Dublin, and [he immediately carved the basic quaternion equations into the side of Brougham Bridge](https://en.wikipedia.org/wiki/Broom_Bridge).
+Hamilton's crucial discovery to model three-dimensional rotations was not to extend complex numbers to three but to four dimensions.
+During this flash of inspiration, he was walking along the Royal Canal in Dublin, and [immediately carved the basic quaternion equations into the side of Brougham Bridge](https://en.wikipedia.org/wiki/Broom_Bridge).
 
 
 # Complex Neural Networks
-I first like to start with a note on training complex neural networks.
+First, I'd like to start with a note on training complex neural networks.
 Generally, the papers we discuss here apply backpropagation in its native form (i.e., by using PyTorch's automatic differentiation) and do not consider complex or quaternion derivatives.
 
 Here, we follow [Trabelsi et al., *Deep Complex Networks*](https://arxiv.org/abs/1705.09792).
 The main idea is simply to replace any real-valued multiplication - as done in regular neural networks - with a complex-valued one.
 To do so, one first needs to represent the complex field in a PyTorch tensor data structure.
-Since complex numbers have a real and imaginary component, we can construct a weight matrix $W \in \mathbb{R}^{c_{\mathrm{out}} \times c_{\mathrm{in}} \times 2}$, which can be interpreted as $W \in \mathbb{C}^{c_{\mathrm{out}} \times c_{\mathrm{in}}}$.
+Since complex numbers have real and imaginary components, we can construct a weight matrix $W \in \mathbb{R}^{c_{\mathrm{out}} \times c_{\mathrm{in}} \times 2}$, which can be interpreted as $W \in \mathbb{C}^{c_{\mathrm{out}} \times c_{\mathrm{in}}}$.
 If we now have a complex feature vector $h \in \mathbb{R}^{c_{\mathrm{in}} \times 2}$, then complex matrix multiplication follows
 
 $$Wh = Ax - By + i (Bx + Ay),$$
@@ -112,13 +113,13 @@ We have
 $$V:=\begin{pmatrix} V_{rr} & V_{ri} \\ V_{ir} & V_{ii} \end{pmatrix} = \begin{pmatrix} \mathrm{Cov}\left( \Re(h), \Re(h) \right) & \mathrm{Cov}\left( \Re(h), \Im(h) \right) \\ \mathrm{Cov}\left(\Im(h), \Re(h) \right) & \mathrm{Cov}\left( \Im(h), \Im(h) \right) \end{pmatrix}.$$
 
 Note that this covariance matrix becomes rather expensive when the number of components per element grows.
-For example, for quaternions this would already become a $4 \times 4$ matrix. 
+For example, for quaternions, this would already become a $4 \times 4$ matrix. 
 For even higher-dimensional fields, this will become unattainable.
 
 #### Implementation
 Presently, PyTorch natively supports many complex-valued operations by simply casting your data to the `torch.cfloat` format.
 We present an example of a complex linear layer and the component-wise ReLU below. 
-For the batch normalization as discussed above, consult for example [this page](https://github.com/ivannz/cplxmodule/blob/master/cplxmodule/nn/modules/batchnorm.py).
+For the batch normalization as discussed above consult, for example, [this page](https://github.com/ivannz/cplxmodule/blob/master/cplxmodule/nn/modules/batchnorm.py).
 
 ```python
 import torch
@@ -152,14 +153,14 @@ In this paper, the authors focus on the latter case.
 We focus on their music transcription experiment.
 Given the waveform, the models' task is to predict which notes (out of 84) are being played.
 Since multiple notes can be played at the same time, the output distributions are given by 84 independent sigmoid units.
-Having access to a model that can effectively perform this task can have significant impact for musicians, music teachers, and many other prefessionals in the music industry.
+Having access to a model that can effectively perform this task can have a significant impact for musicians, music teachers, and many other professionals in the music industry.
 It could considerably speed up the process of studying and sharing music.
 The results can be observed in the table below.
 <figure> 
   <img src="/assets/images/complex-quaternion/musicnet-results.png" style="max-width: 512px;">
   <figcaption>Average precision of deep complex networks on the MusicNet dataset.</figcaption>
 </figure>
-We see that the *average precision* (a classification-treshold independent precision metric) for the complex network is higher despite fewer trainable parameters!
+We see that the *average precision* (a classification-threshold independent precision metric) for the complex network is higher despite fewer trainable parameters!
 
 # Quaternion Networks
 Using complex neural networks, we took a leap from the line (real numbers) to the plane (complex numbers).
@@ -177,7 +178,7 @@ w_3 & -w_2 & w_1 & w_0
 
 where the indices indicate the coefficients of the real and $i, j, k$ parts of the quaternions.
 As such, where a fully connected layer would transform four values using 16 weights, we obtain weight sharing through quaternion multiplication by reusing the same four parameters using the Hamilton product.
-This can induce significant memory-savings.
+This can induce significant memory savings.
 Further, this weight sharing has meaning, as quaternions are used to compute spatial rotations.
 
 #### Linear Layers
@@ -189,7 +190,7 @@ $$h^{\text{out}}_{j} := \sum_{i = 1}^{c_{\text{in}}} W_{ij} h^{\text{in}}_{i} \,
 
 where we use quaternion multiplication to compute $W_{ij} h_{i}$.
 
-In code, one can effectively compute this by through the following code, which is taken from the [official implementation](https://github.com/Orkis-Research/Quaternion-Recurrent-Neural-Networks/blob/master/quaternion_ops.py).
+In code, one can effectively compute this using the following code, which is taken from the [official implementation](https://github.com/Orkis-Research/Quaternion-Recurrent-Neural-Networks/blob/master/quaternion_ops.py).
 
 ```python
 def quaternion_linear(input, r_weight, i_weight, j_weight, k_weight, bias=True):
@@ -257,8 +258,8 @@ It represents the percentage of mistakes a system makes when trying to recognize
   <img src="/assets/images/complex-quaternion/timit-results.png" style="max-width: 512px;">
   <figcaption>Quaternion neural networks achieve lower Phoneme Error Rate (PER) with fewer neurons and parameters.</figcaption>
 </figure>
-In the table we see that QRNN was able to outperform the baseline (i.e., lower development (validation) and test error rates) given a much smaller parameter and neuron budget.
-This effective weight sharing can enable high-quality speech recogniton on low computational devices like smarthpones, which have restricted memory and processing power.
+In the table, we see that QRNN was able to outperform the baseline (i.e., lower development (validation) and test error rates) given a much smaller parameter and neuron budget.
+This effective weight sharing can enable high-quality speech recognition on low computational devices like smartphones, which have restricted memory and processing power.
 
 
 
