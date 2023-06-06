@@ -56,6 +56,19 @@
       };
     });
   </script>
+
+  <script>
+    function calculateReadingTime() {
+      const posts = document.querySelectorAll('.post-content');
+      posts.forEach(post => {
+        const words = post.innerText.split(' ').length;
+        const readingTime = Math.ceil(words / 200);
+        document.getElementById('reading-time').innerText = `${readingTime} minutes.`;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', calculateReadingTime);
+  </script>
+
 </body>
 
 </html>
