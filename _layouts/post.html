@@ -5,31 +5,84 @@ layout: default_post
 
   <header class="post-header">
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
-    <p class="post-meta">
-      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {{ page.date | date: date_format }}
-      </time>
-      {%- if page.author -%}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
-      {%- endif -%}</p>
+    <div class="post-meta-social-container">
+  
+      <p class="post-meta">
+        <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          {{ page.date | date: date_format }}
+        </time>
+        {%- if page.author -%}
+          • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card"
+            itemprop="name">{{ page.author }}</span></span>
+        {%- endif -%}
+      </p>
+  
+      <div class="social-share-buttons">
+  
+        <!-- Twitter -->
+        <a class="twitter-share-button"
+          href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ site.url }}{{ page.url | url_encode }}">
+          Tweet</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  
+  
+        <!-- LinkedIn -->
+        <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+        <script type="IN/Share" data-url="{{ site.url }}{{ page.url }}"></script>
+
+        <!-- Facebook -->
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"
+          nonce="O6szGJ5P"></script>
+        <div class="fb-share-button" data-href="{{ site.url }}{{ page.url }}" data-layout="button_count"
+          data-size="small">
+          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}"
+            class="fb-xfbml-parse-ignore">Share</a>
+        </div>
+  
+      </div>
+  
+    </div>
   </header>
+  
+  
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
   </div>
 
   {%- if site.disqus.shortname -%}
-    {%- include disqus_comments.html -%}
+  {%- include disqus_comments.html -%}
   {%- endif -%}
 
-  <script src="https://utteranc.es/client.js"
-  repo="DavidRuhe/DavidRuhe.github.io"
-  issue-term="pathname"
-  theme="github-light"
-  crossorigin="anonymous"
-  async>
-  </script>
+  <div class="social-share-buttons-bottom">
+
+    <!-- Twitter -->
+    <a class="twitter-share-button"
+      href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ site.url }}{{ page.url | url_encode }}">
+      Tweet</a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  
+    <!-- Facebook -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"
+      nonce="O6szGJ5P"></script>
+    <div class="fb-share-button" data-href="{{ site.url }}{{ page.url }}" data-layout="button_count"
+      data-size="small">
+      <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}"
+        class="fb-xfbml-parse-ignore">Share</a>
+    </div>
+  
+    <!-- LinkedIn -->
+    <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+    <script type="IN/Share" data-url="{{ site.url }}{{ page.url }}"></script>
+  
+  </div>
+  
+  <script src="https://utteranc.es/client.js" repo="DavidRuhe/DavidRuhe.github.io" issue-term="pathname"
+    theme="github-light" crossorigin="anonymous" async>
+    </script>
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>

@@ -1,5 +1,6 @@
 ---
 layout: post
+author: David Ruhe
 title: "Variational Diffusion Models"
 comments: true
 date:   2022-01-01 00:00:00 +0200
