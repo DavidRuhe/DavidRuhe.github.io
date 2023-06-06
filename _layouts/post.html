@@ -14,9 +14,11 @@ layout: default_post
         </time>
         {%- if page.author -%}
           • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card"
-            itemprop="name">{{ page.author }}</span></span>
+            itemprop="name">{{ page.author }} </span></span>
         {%- endif -%}
+          • {{ content | reading_time }} minutes
       </p>
+
   
       <div class="social-share-buttons">
   
