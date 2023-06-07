@@ -1,9 +1,9 @@
 ---
 layout: post
 author: David Ruhe
-title: "Complex to Clifford: An Introduction to Complex and Quaternion Neural Networks"
+title: "Complex to Clifford: Complex and Quaternion Neural Networks"
 comments: true
-hidden: false
+hidden: true
 date:   2023-06-01 00:00:00 +0200
 excerpt: This is a first post discussing a recent series of papers that build up to Clifford group equivariant models. In this series, we start with complex and quaternion neural networks, which can be generalized from a Clifford algebra perspective. Then we further include the Clifford algebra's geometric applications (which is why they are also known as geometric algebras). We then show how to incorporate a Clifford group equivariance constraint in such neural networks.
 
@@ -22,7 +22,7 @@ This post serves as a first step in a series that explores these, called *Comple
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a universe of geometrically inspired learning models. Finally, we will culminate in the exploration of equivariant Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain invariances.
 
-A selection of papers that explore (modern) (hyper)complex neural networks architecture is [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415).
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415).
 
 In this post, we focus on the following papers, which propose complex and quaternion-valued networks, respectively.
 * [Chiheb Trabelsi et al. (ICLR 2018): Deep Complex Networks](https://arxiv.org/abs/1705.09792)
