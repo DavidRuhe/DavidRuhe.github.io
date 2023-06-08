@@ -23,8 +23,14 @@
 }
 
 figure img {
-  display: block;
   margin: 0 auto;
+  object-fit: contain;
+}
+
+figure{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 figcaption {

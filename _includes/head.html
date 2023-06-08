@@ -6,24 +6,18 @@
   <!-- <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?"> -->
   <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
   <!-- <link rel="icon" type="image/x-icon" href="{{ "/assets/favicon.ico" | relative_url }}"> -->
-  <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}" type="image/png" sizes="16x16"/>
+  <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}" type="image/png"
+    sizes="16x16" />
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
   {%- feed_meta -%}
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
-    {%- include google-analytics.html -%}
+  {%- include google-analytics.html -%}
   {%- endif -%}
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      },
-      svg: {
-        fontCache: 'global'
-      }
-    };
-    </script>
-    <script type="text/javascript" id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-    </script>
+
+  {% include mathjax.html %}
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
+
 </head>

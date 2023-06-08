@@ -22,6 +22,9 @@ This post serves as a first step in a series that explores these, called *Comple
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a universe of geometrically inspired learning models. Finally, we will culminate in the exploration of equivariant Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain invariances.
 
+# Include https://proceedings.mlr.press/v48/danihelka16.html
+# Include Zhang, Y., & Li, P. (2018). Quaternion Neural Networks. Pattern Recognition, 76, 673–688
+
 A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415).
 
 In this post, we focus on the following papers, which propose complex and quaternion-valued networks, respectively.
@@ -40,9 +43,8 @@ Complex- and quaternion-valued neural networks offer several unique advantages c
 Here, we list a few of those.
 
 - Richer Representations. Complex- and quaternion-valued neural networks can provide richer representations and transformations. For instance, complex numbers can naturally model phenomena characterized by both magnitude and phase, such as waves in physics, electrical signals, etc. Quaternion numbers, which extend complex numbers by adding two more imaginary parts, are highly effective in representing rotations in 3D space, which can be valuable for computer graphics, robotics, and more. 
-- Neuron Coupling. Similarly to the idea of [Capsule Networks](https://arxiv.org/abs/1710.09829), incorporating complex or higher-order numbers in neural networks allow neurons to be coupled in a precise and meaningful way. In this sense, the neural network can capture more than just an activation value in its representations but also things like part-whole relations.
+- Neuron Coupling. Similarly to the idea of [Capsule Networks](https://arxiv.org/abs/1710.09829), incorporating complex or higher-order numbers in neural networks allow neurons to be coupled in a precise and meaningful way. In this sense, the neural network's activations are not just values, but also contain directional information. 
 - Efficiency. The interplay within the neurons is fixed by the algebraic rules of (hyper)complex multiplication. By doing so, we get fully-connected layers without learning a full weight matrix. This can yield significant savings in memory and computational costs. 
-- Better Generalization. Some studies have shown that quaternion-valued networks may generalize better to unseen data. The potential for better generalization is attributed to the fact that the quaternion algebra captures more inherent correlations in the data, which might be missed by the real-valued models.
 
 
 # An introduction to complex numbers and quaternions.
@@ -71,13 +73,14 @@ $$\begin{aligned}
 pq &= ae - bf - cg - dh \\ &+ (af + be + ch - dg)i \\&+ (ag - bh + ce + df)j \\&+ (ah + bg - cf + de)k
 \end{aligned}$$
 
-The most famous application of quaternions is that they can be used to represent rotations in three dimensions more effectively and intuitively than other methods, such as rotation matrices or Euler angles.
+The most famous application of quaternions is that they can be used [to represent rotations in three dimensions more effectively and intuitively than other methods, such as rotation matrices or Euler angles](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation).
 
 Hamilton's crucial discovery to model three-dimensional rotations was not to extend complex numbers to three but to four dimensions.
 During this flash of inspiration, he was walking along the Royal Canal in Dublin, and [immediately carved the basic quaternion equations into the side of Brougham Bridge](https://en.wikipedia.org/wiki/Broom_Bridge).
 
 
 # Complex Neural Networks
+# TODO: refer to fig 1.
 First, I'd like to start with a note on training complex neural networks.
 Generally, the papers we discuss here apply backpropagation in its native form (i.e., by using PyTorch's automatic differentiation) and do not consider complex or quaternion derivatives.
 
@@ -94,10 +97,11 @@ where we use $A := \Re(W)$ and $B:=\Im(W)$. [Trabelsi et al.](https://arxiv.org/
 #### Activation Functions and Normalization
 <!-- The authors futher want to ensure that their activations are complex differentiable, i.e., they have a derivative at every point in their domain.
 Such functions are also called *holomorphic*. -->
-The authors shortly discuss holomorphic activations (complex-valued functions that are differentiable at every point of their domain) and mention that such functions can be overly restrictive.
-Their proposed activation simply applies a ReLU unit independently to the real and imaginary parts. 
+<!-- The authors shortly discuss holomorphic activations (complex-valued functions that are differentiable at every point of their domain) and mention that such functions can be overly restrictive. -->
+The proposed activation simply applies a ReLU unit independently to the real and imaginary parts. 
 This means that for $h \in \mathbb{R}^{c_{\mathrm{in}} \times 2}$ we can simply apply $h \mapsto \mathrm{ReLU}(h)$ in PyTorch.
-This function is not strictly holomorphic.
+Regarding backpropagation, this function is not strictly holomorphic, i.e., complex diffentiable everywhere.
+However, we can still apply the backpropagation algorithm by considering the coefficients of the complex numbers as independent real numbers.
 
 Let's now consider batch normalization. 
 Batch normalization is a common technique in deep learning that uses batch statistics to renormalize the values of a hidden representation to a well-behaved range.
@@ -105,7 +109,7 @@ To do so, one computes batch-wide mean and variance statistics.
 Since we now work with complex-valued representations containing both a real and an imaginary part, we can consider a *covariance* statistic.
 As such, we can put
 
-$$h \mapsto (V)^{-\frac 12}(h - \mathbb{E}[h],$$
+$$h \mapsto (V)^{-\frac 12}(h - \mathbb{E}[h]),$$
 
 where the covariance and expectation are empirically estimated using the minibatch.
 We have 
@@ -137,8 +141,9 @@ x = x.real.relu() + 1j * x.imag.relu()
 
 #### Experiment: MusicNet
 Complex valued networks inherently posess several advantageous characteristics.
-First, there is a geometric component, since complex normalization essentially computes a two-dimensional rotation.
+First, there is a geometric component, since complex multiplication essentially computes a two-dimensional rotation.
 That means that if one has a dataset containing two-dimensional vector-valued information, this can effectively be represented as a complex number.
+I.e., instead of operating in the two-dimensional Euclidian plane, we operate in the complex plane.
 Second, complex-valued networks can incorporate information regarding the *phase* of a signal through the imaginary part.
 This is why they have achieved state-of-the-art performance in several audio related tasks, where the data have wave characteristics.
 Further, applying Fourier analysis to this data during preprocessing would readily present complex-valued inputs to the network.
@@ -190,7 +195,8 @@ $$h^{\text{out}}_{j} := \sum_{i = 1}^{c_{\text{in}}} W_{ij} h^{\text{in}}_{i} \,
 
 where we use quaternion multiplication to compute $W_{ij} h_{i}$.
 
-In code, one can effectively compute this using the following code, which is taken from the [official implementation](https://github.com/Orkis-Research/Quaternion-Recurrent-Neural-Networks/blob/master/quaternion_ops.py).
+The code is now a bit more involved, as quaternion multiplication is not natively supported by PyTorch.
+One can effectively compute this using the following code, which is taken from the [official implementation](https://github.com/Orkis-Research/Quaternion-Recurrent-Neural-Networks/blob/master/quaternion_ops.py).
 
 ```python
 def quaternion_linear(input, r_weight, i_weight, j_weight, k_weight, bias=True):
@@ -225,7 +231,7 @@ def quaternion_linear(input, r_weight, i_weight, j_weight, k_weight, bias=True):
 ```
 <figcaption>Implementation of a quaternion linear layer.</figcaption>
 
-As one sees, we can use the weight matrix $W \in \mathbb{R}^{c_{\mathrm{in}} \times c_{\text{out}} \times 4}$ to obtain a quaternion weight matrix $W_q \in \mathbb{R}^{4 c_{\mathrm{in}} \times 4 c_{\text{out}}}$ that directly carries out the linear Hamilton-product transformation.
+As one sees, we can use the weight matrix $W \in \mathbb{R}^{c_{\mathrm{in}} \times c_{\text{out}} \times 4}$ to obtain a quaternion weight matrix $W^{\text{quat}} \in \mathbb{R}^{4 c_{\mathrm{in}} \times 4 c_{\text{out}}}$ that directly carries out the linear Hamilton-product transformation (note the similarities to the matrix-form of the Hamilton product introduced earlier!).
 Since the Hamilton product is a linear transformation, and also the linear layer (obviously), it is clear that their combination can be expressed as a matrix multiplication.
 
 Note that convolutional kernels can be constructed in similar manners.
