@@ -16,21 +16,20 @@ excerpt: This is the second post of the Complex to Clifford series, in which we 
     <figcaption>A three-dimensional multivector represents scalar, vector, bivector and trivector structures. The latter two model areal and volumetric quantities. In the current post, the geometric product is used as the main operation to construct linear and convolutional layers.</figcaption>
 </figure>
 
-
-In the [previous post]({% post_url 2023-01-06-hypercomplex-nns %}) of this series, we motivated and gave an introduction to complex and quaternion neural networks.
+In the [previous post]({% post_url 2023-01-06-hypercomplex-nns %}) of this series, we motivated and introduced complex and quaternion neural networks.
 Here, we discuss a recent paper that extends to *Clifford algebras*, obtaining further geometric inductive biases, which we will elaborate on.
 
-A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
 
 In this post, we focus on the following work, which presents Clifford-valued neural layers and their applications to partial differential equation neural surrogates. 
-* [Brandstetter et al. (ICLR 2023): Clifford Neural Layers for PDE Modeling](https://arxiv.org/abs/2209.04934)
+* [Johannes Brandstetter, Rianne van den Berg, Max Welling, Jayesh K. Gupta (ICLR 2023): Clifford Neural Layers for PDE Modeling](https://arxiv.org/abs/2209.04934)
 
 <!-- Should I do Clifford FFT? -->
 # Outline
 * *<a href="#the-clifford-algebra">The Clifford algebra. </a>*What are Clifford algebras?
 * *<a href="#clifford-neural-layers">Clifford Neural Layers. </a>*How to construct Clifford neural layers?
 * *<a href="#the-geometric-product">The Geometric Product. </a>*The fundamental algebra product.
-* *<a href="#experiment-navier-stokes">Experiment: Navier-Stokes. </a>*Modeling the Navier-Stokes equations using Clifford networks.
+* *<a href="#experiment-the-navier-stokes-equations">Experiment: the Navier-Stokes Equations. </a>*Modeling the Navier-Stokes equations using Clifford networks.
 * *<a href="#conclusion">Conclusion. </a>* A wrapup and preview of what's coming up next in this series.
 
 # The Clifford Algebra
@@ -240,6 +239,7 @@ def get_2d_clifford_kernel(
     k = torch.cat([k0, k1, k2, k3], dim=0)
     return 4, k
 ```
+<figcaption>Code snippet of constructing a 2-dimensional Clifford convolutional kernel.</figcaption>
 There are a few discrepancies with the quaternion kernel of the previous post and also with the matrix form of the Clifford product.
 Firstly, this kernel computes *right multiplication* with the weights.
 Second, this computes a convolutional kernel, which slightly permutes the order of some quantities.
@@ -255,7 +255,7 @@ where $W_{ij} h_i$ denotes the *geometric product* (both are elements of $\Cl_{2
 Again, since the geometric product is linear, we can reshape this (as done in the code) into a big weight matrix $W^{\text{geom}} \in \mathbb{R}^{2^n \cdot c_{\text{in}} \times 2^n \cdot c_{\text{out}}}$, where $2^n$ the dimension of the algebra.
 
 <figure> 
-  <img src="/assets/images/clifford-neural-layers/quatnet.pdf/" style="max-width: 50%;">
+  <img src="/assets/images/clifford-neural-layers/quatnet.pdf" style="max-width: 50%;">
   <img src="/assets/images/clifford-neural-layers/header-p2.png" style="max-width: 50%;">
   <figcaption>
     Left: quaternion networks can be generalized from a Clifford perspective. In Clifford networks, each neuron is multivector-valued. Right: sketch of Clifford convolution. The fields and kernels are both multivector-valued, and the geometric product is used as the multiplication operation.
@@ -317,23 +317,23 @@ This behavior is highly nonlinear, making this a challenging problem to solve.
 <figure> 
   <img src="/assets/images/clifford-neural-layers/navier-stokes-example.png" style="max-width: 50%">
   <img src="/assets/images/clifford-neural-layers/navier-stokes.png" style="max-width: 50%">
-  <figcaption>Left: top row displays the input scalar field together with the $x$ and $y$ components of the vector field. The middle row displays the neural network prediction, and the bottom row the ground-truth. Right: one-step and rollout mean-squared-errors of a ResNet, a Clifford ResNet and a rotational Clifford ResNet; all as functions of the number of training trajectories. The Fourier Neural Operator (FNO) and Clifford Fourier Neural Operator (CFNO) results are also shown. Note that the (rotational) Clifford versions outperform their baseline counterparts. Also note that while the FNO results are better in this figure, in <a href="https://arxiv.org/abs/2302.06594">subsequent work</a> we will see that UNet-style architectures based on Clifford layers outperform even the FNOs.</figcaption>
+  <figcaption>Left: top row displays the input scalar field together with the $x$ and $y$ components of the vector field. The middle row displays the neural network prediction, and the bottom row the ground-truth. Right: one-step and rollout mean-squared-errors of a ResNet, a Clifford ResNet, and a rotational Clifford ResNet; all as functions of the number of training trajectories. The Fourier Neural Operator (FNO) and Clifford Fourier Neural Operator (CFNO) results are also shown. Note that the (rotational) Clifford versions outperform their baseline counterparts. Also note that while the FNO results are better in this figure, in <a href="https://arxiv.org/abs/2302.06594">subsequent work</a> we will see that UNet-style architectures based on Clifford layers outperform even the FNOs.</figcaption>
 </figure>
 
 This particular system has a scalar field and a two-dimensional vector field. 
 Since they are coupled by a PDE, it is natural and beneficial to encode them in the scalar and vector parts of a multivector, respectively.
-The one-step loss denotes the error after a single iterations.
+The one-step loss denotes the error after a single iteration.
 The rollout loss shows the cumulative error when the network is autoreggresively applied.
 We see that the Clifford networks steadily outperform their naive counterparts.
 This makes them a promising candidate for such applications, potentially enabling fast and accurate PDE solutions to scientific problems in the near future.
 
 
 # Conclusion
-In this post we focused on the work [Brandstetter et al. (ICLR 2023): Clifford Neural Layers for PDE Modeling](https://arxiv.org/abs/2209.04934).
+In this post, we focused on the work [Clifford Neural Layers for PDE Modeling (ICLR 2023)](https://arxiv.org/abs/2209.04934).
 We introduced Clifford algebras and how to construct neural layers out of them.
-These generalize complex and quaternion neural networks, and hence can tacke similar problems as they do, but even more.
+These generalize complex and quaternion neural networks and hence can tackle similar problems as they do, but even more.
 For example, they were shown to be of great value in approximating partial differential equation solutions by coupling the scalar and vector parts of the PDE in one multivector.
-Of particular interest is the *rotational layer*, since it outperforms the native Clifford layer despite both being an equally flexible linear operation.
+The *rotational layer* is of particular interest, since it outperforms the native Clifford layer despite both being an equally flexible linear operation.
 In the [next post]() of this series, we dive deeper into the geometry of this layer using modern (projective) geometric algebra.
 
 

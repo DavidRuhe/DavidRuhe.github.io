@@ -22,10 +22,7 @@ This post serves as a first step in a series that explores these, called *Comple
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a universe of geometrically inspired learning models. Finally, we will culminate in the exploration of equivariant Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain invariances.
 
-# Include https://proceedings.mlr.press/v48/danihelka16.html
-# Include Zhang, Y., & Li, P. (2018). Quaternion Neural Networks. Pattern Recognition, 76, 673–688
-
-A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415).
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
 
 In this post, we focus on the following papers, which propose complex and quaternion-valued networks, respectively.
 * [Chiheb Trabelsi et al. (ICLR 2018): Deep Complex Networks](https://arxiv.org/abs/1705.09792)
@@ -274,5 +271,5 @@ We've discussed how complex-valued networks open up new possibilities for richer
 We then dived into the four-dimensional space of quaternion-valued networks, witnessing how they can elegantly model multidimensional data and perform complex transformations with weight sharing, significantly reducing memory requirements.
 We've seen in various experiments, including two we've closely examined, that these networks offer distinct advantages and pave the way for new opportunities in the field of data science.
 
-In the upcoming posts, we will discuss how *Clifford algebras* can be used to obtain and generalize properties identical to the complex and quaternion networks discussed here.
+In the [upcoming post]({% post_url 2023-06-07-clifford-layers %}), we will discuss how *Clifford algebras* can be used to obtain and generalize properties identical to the complex and quaternion networks discussed here.
 Because of this generalization, we can also go a step further with them and truly encode some geometry into neural networks.
