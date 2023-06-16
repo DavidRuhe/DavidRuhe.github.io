@@ -10,8 +10,14 @@ excerpt: This is a first post discussing a recent series of papers that build up
 ---
 
 <figure> 
-  <img src="/assets/images/complex-quaternion/header.png">
-  <figcaption>Left: complex neural network with real part (yellow) and imaginary part (red). Right: quaternion neural network with real part in yellow, and imaginary parts in red, blue, and green. Note: though regarded as a crucial advantage of these architectures, the interconnectivity between the numbers' components is not shown to avoid cluttering.</figcaption>
+  <!-- <img src="/assets/images/complex-quaternion/header.png"> -->
+  <div class="figure-image">
+    <img src="/assets/images/complex-quaternion/neural_network-7.pdf">
+  </div>
+  <div class="figure-image">
+    <img src="/assets/images/complex-quaternion/neural_network-6.pdf">
+  </div>
+  <figcaption>Left: complex neural network showing real (blue) and imaginary (red) parts. Observe how complex multiplication mixes in a fully connected way: red for imaginary to real, red dashed for imaginary to imaginary, blue for real to real, and blue dashed for real to imaginary. Right: quaternion neural network with real part in yellow, and imaginary parts in red, blue, and green. Note: unlike the complex neural network, the interconnections between the quaternion components is not depicted here to avoid heavy cluttering.</figcaption>
 </figure>
 
 # Introduction
@@ -77,7 +83,6 @@ During this flash of inspiration, he was walking along the Royal Canal in Dublin
 
 
 # Complex Neural Networks
-# TODO: refer to fig 1.
 First, I'd like to start with a note on training complex neural networks.
 Generally, the papers we discuss here apply backpropagation in its native form (i.e., by using PyTorch's automatic differentiation) and do not consider complex or quaternion derivatives.
 
@@ -89,7 +94,11 @@ If we now have a complex feature vector $h \in \mathbb{R}^{c_{\mathrm{in}} \time
 
 $$Wh = Ax - By + i (Bx + Ay),$$
 
-where we use $A := \Re(W)$ and $B:=\Im(W)$. [Trabelsi et al.](https://arxiv.org/abs/1705.09792) further extend this to complex convolutions, but the idea remains the same.
+where we use $A := \Re(W)$, $x:= \Re(h)$, $y:=\Im(h)$, and $B:=\Im(W)$. [Trabelsi et al.](https://arxiv.org/abs/1705.09792) further extend this to complex convolutions, but the idea remains the same.
+We see how we automatically get full mixing between the real and imaginary parts governed by the same parameters $A$ and $B$. 
+This is also illustrated in the header figure at the top of this post.
+We will discuss this parameter sharing in more detail below.
+
 
 #### Activation Functions and Normalization
 <!-- The authors futher want to ensure that their activations are complex differentiable, i.e., they have a derivative at every point in their domain.
@@ -147,7 +156,9 @@ Further, applying Fourier analysis to this data during preprocessing would readi
 Complex neural networks will respect the nature of such data.
 
 <figure> 
-  <img src="/assets/images/complex-quaternion/transcription.png" style="max-width: 512px;">
+  <div class="figure-image">
+    <img src="/assets/images/complex-quaternion/transcription.png">
+  </div>
   <figcaption>A natural application of complex neural networks is found in music transcription.</figcaption>
 </figure>
 
@@ -159,7 +170,9 @@ Having access to a model that can effectively perform this task can have a signi
 It could considerably speed up the process of studying and sharing music.
 The results can be observed in the table below.
 <figure> 
+  <div class="figure-image">
   <img src="/assets/images/complex-quaternion/musicnet-results.png" style="max-width: 512px;">
+  </div>
   <figcaption>Average precision of deep complex networks on the MusicNet dataset.</figcaption>
 </figure>
 We see that the *average precision* (a classification-threshold independent precision metric) for the complex network is higher despite fewer trainable parameters!
@@ -195,7 +208,7 @@ where we use quaternion multiplication to compute $W_{ij} h_{i}$.
 The code is now a bit more involved, as quaternion multiplication is not natively supported by PyTorch.
 One can effectively compute this using the following code, which is taken from the [official implementation](https://github.com/Orkis-Research/Quaternion-Recurrent-Neural-Networks/blob/master/quaternion_ops.py).
 
-```python
+<!-- ```python
 def quaternion_linear(input, r_weight, i_weight, j_weight, k_weight, bias=True):
     """
     Applies a quaternion linear transformation to the incoming data:
@@ -226,7 +239,7 @@ def quaternion_linear(input, r_weight, i_weight, j_weight, k_weight, bias=True):
         else:
             return output
 ```
-<figcaption>Implementation of a quaternion linear layer.</figcaption>
+<figcaption>Implementation of a quaternion linear layer.</figcaption> -->
 
 As one sees, we can use the weight matrix $W \in \mathbb{R}^{c_{\mathrm{in}} \times c_{\text{out}} \times 4}$ to obtain a quaternion weight matrix $W^{\text{quat}} \in \mathbb{R}^{4 c_{\mathrm{in}} \times 4 c_{\text{out}}}$ that directly carries out the linear Hamilton-product transformation (note the similarities to the matrix-form of the Hamilton product introduced earlier!).
 Since the Hamilton product is a linear transformation, and also the linear layer (obviously), it is clear that their combination can be expressed as a matrix multiplication.
@@ -248,7 +261,9 @@ where $f$ is a ReLU (or any scalar activation function, for that matter).
 figcaption -->
 
 <figure> 
+  <div class="figure-image">
   <img src="/assets/images/complex-quaternion/sr.png" style="max-width: 512px;">
+  </div>
   <figcaption>Quaternion networks can effectively be used for automatic speech recognition. Source: Wikipedia</figcaption>
 </figure>
 
@@ -258,7 +273,9 @@ The authors compare quaternion RNNs (QRNNs) against their usual counterparts on 
 The performance measure is Phoneme Error Rate (PER): a measure often used in the field of speech recognition to evaluate the performance of a system. 
 It represents the percentage of mistakes a system makes when trying to recognize individual phonemes - the smallest distinct units of sound in a particular language that differentiate one word from another.
 <figure> 
+  <div class="figure-image">
   <img src="/assets/images/complex-quaternion/timit-results.png" style="max-width: 512px;">
+  </div>
   <figcaption>Quaternion neural networks achieve lower Phoneme Error Rate (PER) with fewer neurons and parameters.</figcaption>
 </figure>
 In the table, we see that QRNN was able to outperform the baseline (i.e., lower development (validation) and test error rates) given a much smaller parameter and neuron budget.
@@ -273,3 +290,7 @@ We've seen in various experiments, including two we've closely examined, that th
 
 In the [upcoming post]({% post_url 2023-06-07-clifford-layers %}), we will discuss how *Clifford algebras* can be used to obtain and generalize properties identical to the complex and quaternion networks discussed here.
 Because of this generalization, we can also go a step further with them and truly encode some geometry into neural networks.
+Let me know in the comments below if you have questions, comments, or ideas worth sharing!
+
+# Acknowledgments
+I would like to thank Johannes Brandstetter, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.

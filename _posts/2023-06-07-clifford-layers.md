@@ -51,7 +51,7 @@ These naming conventions unfortunately lead to much confusion; the papers listed
 
 #### The quadratic form
 The construction (apart from mathematical details) of the Clifford algebra is relatively simple.
-We take a regular vector space $V$ over a field $\mathbb{F}$ (usually the reals $\mathbb{R}$) and turn it into a *quadratic vector space* (denoted with a tuple $(V, q)$) by endowing it with a quadratic form $Q$.
+We take a regular vector space $V$ over a field $\mathbb{F}$ (usually the reals $\mathbb{R}$) and turn it into a *quadratic vector space* (denoted with a tuple $(V, Q)$) by endowing it with a quadratic form $Q$.
 This quadratic form $Q: V \to \mathbb{F}$ takes a vector and returns a scalar.
 That is, vectors square to scalars!
 Note that we assume that we can multiply (and therefore square) vectors - a property inherited from the underlying *tensor algebra*. 
@@ -77,6 +77,12 @@ e_i^2 = Q(e_i) = -1 \qquad &p < i \le p + q \,.
 \end{aligned}
 $$
 
+For example, consider $\Cl_{0, 2}(\mathbb{R})$, which has two basis vectors ($\dim \mathbb{R}^2 = 2$).
+Let's examine the first one: $e_1$.
+
+$$Q(e_1) = [1, 0]^\top \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} [1, 0] = -1$$
+
+
 # The Geometric Product
 Let's consider two vectors $a$ and $b$ expressed in the basis $\\{e_1, e_2\\}$.
 That is, we have a two-dimensional vector space, and we further assume that the metric is positive definite.
@@ -86,7 +92,7 @@ Their geometric product looks as follows:
 $$
 \begin{aligned}
 ab = (a_1 e_1 + a_2 e_2)(b_1 e_1 + b_2 e_2) &= a_1e_1(b_1 e_1 + b_2 e_2) + a_2 e_2 (b_1 e_1 + b_2 e_2) \\
-&= a_1 b_1 e_1^2 + a_1 b_2 e_1 e_2 + a_2 e_2 b_1 e_2 e_1 + a_2 b_2 e_2^2 \\
+&= a_1 b_1 e_1^2 + a_1 b_2 e_1 e_2 + a_2 b_1 e_2 e_1 + a_2 b_2 e_2^2 \\
 &= (a_1 b_1 + a_2 b_2)1 + (a_1 b_2 - a_2 b_1)e_1 e_2 \,.
 \end{aligned}
 $$
@@ -99,7 +105,11 @@ Regarding the last line, we first take a slight detour and introduce the Cliffor
 #### The Clifford Algebra basis
 [One can show that it is possible to construct a well-defined basis for the Clifford algebra](https://arxiv.org/abs/2305.11141).
 Further, this basis contains $2^n$ elements, where $n:= \dim V$.
-Regarding the $\Cl_{2, 0}(\Rbb)$ case, we see that it contains scalar elements (multiples of $1$) in $\Rbb$, and we naturally have vector elements in $V$.
+Regarding the $\Cl_{2, 0}(\Rbb)$ case, a general element $x$ can be written as
+
+$$x = x_0 1 + x_1 e_1 + x_2 e_2 + x_{12} e_{12} \,.$$
+
+We see that it contains scalar elements (multiples of $1$) in $\Rbb$, and we naturally have vector elements in $V$.
 However, since we are allowed to take products, we can also produce $e_1 e_2$.
 This element cannot be reduced and is regarded as a valid basis element of the algebra.
 For $\Cl_{2, 0}(\Rbb)$, the basis therefore has $\\{1, e_1, e_2, e_{12} \\}$ ($e_{12} := e_1 e_2$), containing $4 = 2^2$ elements.
@@ -113,8 +123,9 @@ $$\{1, e_1, e_2, e_3, e_{12}, e_{13}, e_{23}, e_{123} \}$$
 
 which has $2^3=8$ elements.
 Here, we even get a *trivector* element, which relates to a volumetric quantity.
+Basis elements are also referred to as (basis) *blades*.
 
-<img src="/assets/images/clifford-neural-layers/header-p1.png" style="width: 100%;">
+<img src="/assets/images/clifford-neural-layers/header-p3.png" style="width: 100%;">
 <figcaption>The basis elements of a three-dimensional multivector - a general element of a Clifford algebra over a three-dimensional vector space. Apart from the usual scalars, we get basis elements representing areal and volumetric quantities. </figcaption>
 
 
@@ -129,7 +140,7 @@ $$v_1, v_2 \mapsto \langle v_1, v_2 \rangle := v_1^\top G v_2$$
 Hence, when the vectors are equal, it reduces exactly to the quadratic form.
 When the metric is positive definite, it is exactly the dot product.
 
-This bilinear form comes together with the *fundamental Clifford identity*
+This bilinear form comes together with the *fundamental Clifford identity* (see, e.g., [Wikipedia](https://en.wikipedia.org/wiki/Clifford_algebra) for details)
 
 $$v_1 v_2 + v_2 v_1 = 2 \langle v_1, v_2 \rangle \,.$$
 
@@ -143,8 +154,9 @@ In the geometric product derivation, this is used in the final line to express t
 You should now be able to re-derive the geometric product of two vectors 🙂.
 
 #### The wedge product
-Note that the scalar part of the geometric product is equal to the bilinear form $\langle a, b \rangle$.
-This means that 
+Note that the scalar part of the geometric product (e.g., using the one we calculated above, the "$a_1 b_1 + a_2 b_2$" part) is equal to the bilinear form $\langle a, b \rangle$.
+Using the fundamental Clifford identity, we have that $\langle a, b \rangle = \frac 12 (ab + ba)$. 
+In turn, this means that 
 
 $$ab = \frac12 (ab + ba) + \frac12(ab - ba)$$
 
@@ -161,7 +173,9 @@ As such, the geometric product of two vectors can be written as the sum of the d
 $$\Large ab = \langle a, b \rangle + a \wedge b$$
 
 <figure> 
-  <img src="/assets/images/clifford-neural-layers/geometric-product.pdf" style="width: 100%; max-width: 512px;">
+    <div class="figure-image">
+    <img src="/assets/images/clifford-neural-layers/geometric-product.pdf" style="max-width: 384px;">
+    </div>
   <figcaption>Visualization of the geometric product of two vectors as a combination of the dot and wedge product. For visualization purposes, we present the magnitude of the projection of $b$ onto $a$: $|b|\cos \theta$, which relates to the dot product as $\langle a, b \rangle = |a||b| \cos\theta$. Further, $a \wedge b$ is the size of the parallelogram that $a$ and $b$ define (colored in red). </figcaption>
 </figure>
 
@@ -255,13 +269,16 @@ where $W_{ij} h_i$ denotes the *geometric product* (both are elements of $\Cl_{2
 Again, since the geometric product is linear, we can reshape this (as done in the code) into a big weight matrix $W^{\text{geom}} \in \mathbb{R}^{2^n \cdot c_{\text{in}} \times 2^n \cdot c_{\text{out}}}$, where $2^n$ the dimension of the algebra.
 
 <figure> 
-  <img src="/assets/images/clifford-neural-layers/quatnet.pdf" style="max-width: 50%;">
-  <img src="/assets/images/clifford-neural-layers/header-p2.png" style="max-width: 50%;">
+    <div class="figure-image">
+        <img src="/assets/images/clifford-neural-layers/quatnet.pdf">
+    </div>
+    <div class="figure-image">
+  <img src="/assets/images/clifford-neural-layers/header-p2.png">
+    </div>
   <figcaption>
     Left: quaternion networks can be generalized from a Clifford perspective. In Clifford networks, each neuron is multivector-valued. Right: sketch of Clifford convolution. The fields and kernels are both multivector-valued, and the geometric product is used as the multiplication operation.
  </figcaption>
 </figure>
-
 
 #### Clifford rotational layers
 As we saw above, the geometric product can naturally be geometrically interpreted.
@@ -284,7 +301,7 @@ Hence, we apply the geometric product for that part but consider only its scalar
 
 This entire operation is still linear. However, empirically, the authors note that this rotational layer typically outperforms its Clifford layer counterpart.
 They hypothesize that this is due to the fact that rotation is a highly interpretable and valid geometric operation, where geometric products can be harder to interpret when applied to full multivectors.
-This will be further explored in the [next blog post of this series]().
+This will be further explored in the [next blog post of this series]({% post_url 2023-06-07-ga-layers %}).
 
 For a code implementation of this kernel, see [this page](https://github.com/microsoft/cliffordlayers/blob/main/cliffordlayers/cliffordkernels.py).
 
@@ -295,7 +312,7 @@ That is, they apply component-wise ReLUs:
 $$h \mapsto \text{CliffordReLU}(h) := \text{ReLU}([h_{i}]_0) + \text{ReLU}([h_{i}]_1)e_1 + \text{ReLU}([h_{i}]_2)e_2 + \text{ReLU}([h_{i}]_{12}) e_{12}.$$
 
 
-The batch normalization from the complex neural networks of [Trabelsi et al.](https://arxiv.org/abs/1705.09792) (see [previous post]()) gets extended to a Clifford batch normalization:
+The batch normalization from the complex neural networks of [Trabelsi et al.](https://arxiv.org/abs/1705.09792) (see [previous post]({% post_url 2023-01-06-hypercomplex-nns %})) gets extended to a Clifford batch normalization:
 
 $$h \mapsto (V)^{-\frac 12}(h - \mathbb{E}[h]),$$
 
@@ -315,13 +332,19 @@ Machine learning and neural networks provide a promising tool for obtaining fait
 The incompressible Navier-Stokes equations describe how a fluid behaves in a closed system.
 This behavior is highly nonlinear, making this a challenging problem to solve.
 <figure> 
-  <img src="/assets/images/clifford-neural-layers/navier-stokes-example.png" style="max-width: 50%">
-  <img src="/assets/images/clifford-neural-layers/navier-stokes.png" style="max-width: 50%">
+    <div class="figure-image">
+        <img src="/assets/images/clifford-neural-layers/navier-stokes-example.png">
+    </div>
+    <div class="figure-image">
+        <img src="/assets/images/clifford-neural-layers/navier-stokes.png">
+    </div>
   <figcaption>Left: top row displays the input scalar field together with the $x$ and $y$ components of the vector field. The middle row displays the neural network prediction, and the bottom row the ground-truth. Right: one-step and rollout mean-squared-errors of a ResNet, a Clifford ResNet, and a rotational Clifford ResNet; all as functions of the number of training trajectories. The Fourier Neural Operator (FNO) and Clifford Fourier Neural Operator (CFNO) results are also shown. Note that the (rotational) Clifford versions outperform their baseline counterparts. Also note that while the FNO results are better in this figure, in <a href="https://arxiv.org/abs/2302.06594">subsequent work</a> we will see that UNet-style architectures based on Clifford layers outperform even the FNOs.</figcaption>
 </figure>
 
 This particular system has a scalar field and a two-dimensional vector field. 
 Since they are coupled by a PDE, it is natural and beneficial to encode them in the scalar and vector parts of a multivector, respectively.
+Hence, we work with the algebra $\Cl_{2, 0}(\mathbb{R})$.
+The bivector part of the algebra is left empty (zero) at the data input, but throughout the network the bivector part will get populated.
 The one-step loss denotes the error after a single iteration.
 The rollout loss shows the cumulative error when the network is autoreggresively applied.
 We see that the Clifford networks steadily outperform their naive counterparts.
@@ -334,7 +357,11 @@ We introduced Clifford algebras and how to construct neural layers out of them.
 These generalize complex and quaternion neural networks and hence can tackle similar problems as they do, but even more.
 For example, they were shown to be of great value in approximating partial differential equation solutions by coupling the scalar and vector parts of the PDE in one multivector.
 The *rotational layer* is of particular interest, since it outperforms the native Clifford layer despite both being an equally flexible linear operation.
-In the [next post]() of this series, we dive deeper into the geometry of this layer using modern (projective) geometric algebra.
+In the [next post]({% post_url 2023-06-07-ga-layers %}) of this series, we dive deeper into the geometry of this layer using modern (projective) geometric algebra.
+Let me know in the comments below if you have questions, comments, or ideas worth sharing!
+
+# Acknowledgments
+I would like to thank Johannes Brandstetter, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
 
 
 

@@ -4,6 +4,18 @@
 
 @import "minima";
 
+.theorem {
+  display: block;
+  font-style: italic;
+  }
+  .theorem:before {
+  content: "Theorem. ";
+  font-weight: bold;
+  font-style: normal;
+  }
+  .theorem[text]:before {
+  content: "Theorem (" attr(text) ") ";
+  }
 
 @include media-query($on-palm) {
   .post-meta-social-container {
@@ -19,24 +31,81 @@
     text-align: center;
     padding-bottom: 10px;
   }
-
 }
 
-figure img {
-  margin: 0 auto;
-  object-fit: contain;
-}
-
-figure{
+figure {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
+figure .figure-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+figure .figure-image img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+ @include media-query($on-palm) {
+  figure .figure-image {
+    flex: 0 0 100%;
+    padding: 0px;
+  }
+}
+
+// figure {
+  // display: flex;
+  // flex-direction: row;
+  // justify-content: space-between;
+  // overflow: hidden;
+  // display: flex;
+  // width: 100%;
+  // width: 100%;
+// }
+
+// figure img {
+  // width: auto;
+  // flex: 1 1 0;
+  // object-fit: contain;
+  // flex: 1;
+  // width: 100%;
+  // height: auto;
+  // flex: 1 1 auto;
+  // object-fit: contain;
+// }
+
+// figure img {
+//   margin: 0 auto;
+//   object-fit: contain;
+// }
+
+// figure{
+//   display: flex;
+//   justify-content: center;
+//   flex-wrap: wrap;
+//   flex-direction: row;
+//   align-items: center;
+// }
+
 figcaption {
+  width: 100%;
   text-align: center;
   color: gray;
 }
+
+// @include media-query($on-palm) {
+//   figure{
+//     flex-direction: column;
+//   }
+// }
 
 .post-meta-social-container {
   display: flex;
@@ -51,7 +120,8 @@ figcaption {
 }
 
 .social-share-buttons {
-  padding-right: 96px;
+  // padding-right: 96px;
+  padding-right: 0px;
 }
 
 .social-share-buttons a,
