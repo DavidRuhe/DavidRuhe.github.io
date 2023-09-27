@@ -130,7 +130,7 @@ In eq. $(1)$ the first term is a prior loss, where $p(\mathbf z_T)$ is parameter
 ### Likelihood
 The second term is a data likelihood term (e.g., reconstruction loss). We know that $\mathbf x$ has 256 distinct values.
 
-We define a Gaussian $\hat{p}(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \hat{\mathbf x}_\theta(\mathbf z_1; 1), \sigma_1^2 \mathbf I)$, where $\hat{\mathbf x}_\theta(\mathbf z_1; 1)$ is the reconstructed image from the first time-step. 
+We define a Gaussian $\hat{p}(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \hat{\mathbf x}_\theta(\mathbf z_1; 1)$, \sigma_1^2 \mathbf I)$, where $\hat{\mathbf x}_\theta(\mathbf z_1; 1)$ is the reconstructed image from the first time-step. 
 As such, we re-use the same reconstruction network as in the diffusion loss. We can compute the likelihood analytically by integrating over the 256 possible values of $\mathbf x$.
 $$\begin{aligned}
 p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u}  \hat{p}(\mathbf x \mid \mathbf z_1) d \mathbf x \\
