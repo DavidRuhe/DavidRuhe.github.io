@@ -9,7 +9,7 @@ excerpt: An exploration of denoising diffusion models using the paper "Variation
 > January 2022. Note, this is still work in progress. If anything about the post or code is not clear, please let me know!
 
 ## Overview
-Generative models model the data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$. Recent popular examples of such models are [Generative Adversarial Networks (GANs)](), [Normalizing Flows]() and [Variational Autoencoder](). The latter is an example of a *Latent Variable Model*, where a data-point is encoded into a latent variable $\mathbf z$ that usually should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
+Generative models model a data-generating process. Suppose we have data $\{\mathbf x_1, \dots, \mathbf x_N\}$, $\mathbf x_i \sim q(\mathbf x)$, we want to minimize some divergence between the empirical distribution and our model $p_\theta(\mathbf x)$, where $\theta$ denotes a parameter. Recent popular examples of such models are Generative Adversarial Networks (GANs), Normalizing Flows and Variational Autoencoders. The latter is an example of a *Latent Variable Model*, where a data-point is encoded into a latent variable $\mathbf z$ that usually should approximately follow a Gaussian distribution. If this criterion is met, we can sample from the Gaussian and generate new data.
 
 Diffusion models have recently gained popularity by obtaining exceptional high-quality image synthesis (and data likelihoods) while being easy to train. They, too, are latent variable models, but instead of encoding the data directly to a Gaussian random variable, the data is slowly *diffused* into one by adding many small noise variables. See the following figure (taken from [Jonathan Ho's post](https://hojonathanho.github.io/diffusion/)).
 
@@ -19,43 +19,47 @@ This post details how the models are formally developed and provide [a simple im
 
 
 ## Model Development
-In a sense, a diffusion model can be seen as many [[Variational Autoencoder|Variational Autoencoders]] stacked on top of each other, and the encoders are fixed as Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
+In a sense, a diffusion model can be seen as many Variational Autoencoders stacked on top of each other, and the encoders are fixed as linear Gaussians. In the continuous case, we assume *infinitely* many encoders. Every number from the interval $[0, 1]$ determines such an encoder as follows:
 
 $$q(\mathbf z_t \mid \mathbf x)=\mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I),$$
 
-where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule, and are determined completely by $t \in [0, 1]$. $\mathbf x$ is the datum, and $\mathbf z_t$ is the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process can equivalently be seen as an additive Gaussian noise process. When $t$ is close to $0$ the image is hardly affected. When $t$ approaches $1$ we desire it to be close to a normal distribution from which we can easily sample.
-The process can be modeled with a Markov chain of (very) many additive Gaussian noise transitions. 
+where $\alpha_t$ and $\sigma_t$ make the (signal to) noise schedule. $\mathbf x$ is the data point, and $\mathbf z_t$ is the encoded variable.  We also assume that the *signal-to-noise ratio* $\alpha_t^2 / \sigma_t^2$ decreases monotonically with $t$. As such, the encoding process is an additive Gaussian noise process. When $t$ is close to $0$, the image is hardly affected. When $t$ approaches $1$, we desire it to be close to a normal distribution.
+That is, all signal is diffused into Gaussian noise.
+In the following, however, we treat $t$ as a discrete variable going from $1$ to $T$.
+For the continuous case, see the Variational Diffusion Models paper.
+The process can be modeled with a Markov chain of many additive Gaussian noise transitions. 
 
-$$\mathbf x \rightarrow \dots \rightarrow \mathbf z_s \rightarrow \dots \rightarrow \mathbf z_{t-1} \rightarrow \mathbf z_t \rightarrow z_{t+1} \rightarrow \dots \rightarrow \mathbf z_T$$
+$$\mathbf x \rightarrow \dots \rightarrow \mathbf z_s \rightarrow \dots \rightarrow \mathbf z_{t-1} \rightarrow \mathbf z_t \rightarrow \mathbf z_{t+1} \rightarrow \dots \rightarrow \mathbf z_T$$
 
 Therefore, the inference distribution factorizes as
 
 $$q(\mathbf z_{1:T}, \mathbf x) = q(\mathbf x) q(\mathbf z_1 \mid \mathbf x) \prod_{t=2}^T  q(\mathbf z_t | \mathbf z_{t-1}).$$
 
-We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $\mathbf z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1} \mathbf I)$. Therefore, since the noise process is monotonic
-[[We used the fact that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term with variance $\sigma_{t \mid t-1}^2$).::rsn]],
+This is also called the *forward* process.
+We can analytically obtain $q(\mathbf z_t \mid \mathbf z_{t-1})$. We know that, by definition, $\mathbf z_{t-1} \sim \mathcal{N}(\alpha_{t-1} \mathbf x, \sigma_{t-1}^2 \mathbf I)$. Therefore, since the noise process is monotonic
 
 $$\mathbf z_t \sim \mathcal{N}(\alpha_{t|t-1} \alpha_{t-1} \mathbf x,\, \alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I + \sigma^2_{t|t-1}\mathbf I)$$
 
-But we also know that $\mathbf z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t \mathbf I)$. Hence, 
+Here, we used the fact that scaling a Gaussian random variable with a factor scales its variance with that factor squared (and included the assumed additive noise term with variance $\sigma_{t \mid t-1}^2$).
+We also know that $\mathbf z_t \sim \mathcal{N}(\alpha_t \mathbf x, \sigma_t^2 \mathbf I)$. Hence, 
 
 $$\alpha_{t|t-1} \alpha_{t-1} \mathbf x = \alpha_t \mathbf x \iff \alpha_{t|t-1} = \frac{\alpha_t}{\alpha_{t-1}}$$
 
 $$\alpha_{t|t-1}^2 \sigma^2_{t-1} \mathbf I  + \sigma^2_{t|t-1} \mathbf I   = \sigma^2_t \mathbf I \iff \sigma^2_{t|t-1}  =   \sigma^2_t - \alpha_{t|t-1}^2 \sigma^2_{t-1}$$
 
-Therefore, we also know that 
+Therefore, we see that 
 
-$$q(\mathbf z_t \mid \mathbf z_{t-1}) = \mathcal{N}(\alpha_{t|t-1} \mathbf z_{t-1}, \sigma_{t|t-1}\mathbf I)$$ 
+$$q(\mathbf z_t \mid \mathbf z_{t-1}) = \mathcal{N}(\alpha_{t|t-1} \mathbf z_{t-1}, \sigma_{t|t-1}^2\mathbf I)$$ 
 
-and we can directly compute the parameters from the known noise schedule parameters.
+and we can directly compute the coefficients $\alpha_{t|t-1}$ and $\sigma_{t|t-1}$ from the known noise schedule parameters.
 
-We have obtained an inference distribution $q(\mathbf x, \mathbf z_{1:T})$. We parameterize a model $p_\theta(\mathbf x, \mathbf z_{1:T})$ in the data generating direction (from noise to data). Now we simply minimize the relative entropy
+We have obtained a tractable inference distribution $q(\mathbf x, \mathbf z_{1:T})$. We now parameterize a model $p_\theta(\mathbf x, \mathbf z_{1:T})$ in the data generating direction (from noise to data). We minimize the relative entropy
 
-$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = \min \mathbb{E}_{q(\mathbf x, \mathbf z_{1:T})} [\log q(\mathbf x, \mathbf z_{1:T}) - \log p(\mathbf x, \mathbf z_{1:T}))]$$
+$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T})] = \min \mathbb{E}_{q(\mathbf x, \mathbf z_{1:T})} [\log q(\mathbf x, \mathbf z_{1:T}) - \log p(\mathbf x, \mathbf z_{1:T})]$$
 
-that we rewrite to
+which we rewrite to
 
-$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T}))] = \min \mathbb{E}_{q(\mathbf x)}\left[D_{KL}(q(\mathbf z_T \mid \mathbf x) || p(\mathbf z_T))) + \mathbb{E}_{q(\mathbf z_1 \mid \mathbf x)} [- \log p(\mathbf x \mid \mathbf z_1)] + \mathcal{L}_D\right] \tag{1},$$
+$$\min D_{KL}[q(\mathbf x, \mathbf z_{1:T}) || p(\mathbf x, \mathbf z_{1:T})] = \min \mathbb{E}_{q(\mathbf x)}\left[D_{KL}(q(\mathbf z_T \mid \mathbf x) || p(\mathbf z_T)) + \mathbb{E}_{q(\mathbf z_1 \mid \mathbf x)} [- \log p(\mathbf x \mid \mathbf z_1)] + \mathcal{L}_D\right] \tag{1},$$
 
 with
 
@@ -63,7 +67,8 @@ $$
 \mathcal{L}_D := \sum_{t=2}^T \mathbb{E}_{q(\mathbf z_t \mid \mathbf x)} \left[ D_{KL}[q(\mathbf z_{t-1} \mid \mathbf z_t, \mathbf x)||p(\mathbf z_{t-1} \mid \mathbf z_t)]\right] \tag{2}.
 $$
 
-Note that we can replace sampling through the Markov chain by directly sampling conditioned on $\mathbf x$. These terms are derived as follows.
+We will discuss these terms in more detail later.
+Note that in $\mathcal{L}_D$, we replaced sampling through the Markov chain (ancestral sampling) with directly sampling $q(\mathbf z_t \mid \mathbf x)$.
 
 $$\begin{aligned}
 \log q(\mathbf z_{1:T} | \mathbf x) - \log p(\mathbf z_{1:T}, \mathbf x) 
@@ -77,23 +82,14 @@ The second equality follows from Bayes' rule:
 
 $$q(\mathbf z_t \mid \mathbf z_{t-1}) \stackrel{\mathbf z_t \perp\!\!\perp \mathbf x \mid \mathbf z_{t-1}}{=} q(\mathbf z_t \mid \mathbf z_{t-1}, \mathbf x) = q(\mathbf z_{t-1} \mid \mathbf z_t, \mathbf x) \cdot \frac{q(\mathbf z_t \mid \mathbf x)}{q(\mathbf z_{t-1} \mid x)}.$$
 
-The third equality follows from how many terms $q(\mathbf z_t \mid \mathbf x)$ and $q(\mathbf z_{t-1} \mid \mathbf x)$ cancel with each-other in the summation and with $q(\mathbf z_1 \mid \mathbf x)$ that was in front of it. Only $q(\mathbf z_T \mid \mathbf x)$ remains.
+The follows from the many terms $q(\mathbf z_t \mid \mathbf x)$ and $q(\mathbf z_{t-1} \mid \mathbf x)$ cancel with each-other in the summation and with $q(\mathbf z_1 \mid \mathbf x)$ that was in front of it. Only $q(\mathbf z_T \mid \mathbf x)$ remains.
 
 The obtained three terms form the loss function that we presented earlier.
 
 ## Analyzing The Divergence
-In eq. $(1)$ the first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian and can be computed in closed form. 
-
-The second term is a data likelihood term (e.g., reconstruction loss). Since, for images, $\mathbf x$ lives in a discrete space, but $q(\mathbf z_1 \mid \mathbf x)$ is a Gaussian and thus lives on the whole number line, we have to divide it into regions. We know that $\mathbf x$ has 256 distinct values, and hence we can choose
-
-$$\begin{aligned}
-p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u} \mathcal{N}(\mathbf x \mid \mathbf z_1, \sigma^2_1 \mathbf I) d \mathbf x \\
-&= \Phi((\mathbf x + d_u - \mathbf z_1) / \sigma_1) - \Phi((\mathbf x - d_u - \mathbf z_1) / \sigma_1).
-\end{aligned}$$
-
-Now, $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$ & $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty$ & $d_l = 0.5$ for $\mathbf x = 255$ divide the whole space into 256 parts that naturally add to 1.
-
-The other terms form the "diffusion loss". These can also be rewritten so that we *only have to perform data reconstruction during training*.
+We study the terms of the objective function a bit more closely. 
+### Diffusion Loss
+Starting with the diffusion loss $\mathcal{L}_D$, we see that these can be rewritten so that we *only have to perform data reconstruction during training*.
 
 $$\begin{aligned}
 q(\mathbf z_{t-1}\mid \mathbf z_t, \mathbf x) &= \frac{q(\mathbf z_t \mid \mathbf z_{t-1}, \mathbf x)}{q(\mathbf z_t \mid \mathbf x)} \cdot q(\mathbf z_{t-1} \mid \mathbf x) \\
@@ -103,7 +99,7 @@ $$
 
 We already obtained an analytic form of the transition $q(\mathbf z_t \mid \mathbf z_{t-1})$ and we know $q(\mathbf z_{t-1} \mid \mathbf x)$ by construction.  Since the transition is linear, $q(\mathbf z_t, \mathbf z_{t-1} \mid x)$ is *jointly Gaussian*. Therefore, using the well-known results for conditional Gaussians (e.g., Bishop (2006)) we get that 
 
-$$q(\mathbf z_{t-1} \mid \mathbf x, \mathbf z_t) = \mathcal{N}(\boldsymbol \mu_{t-1|t}, \sigma_{t-1|t},\mathbf I),$$
+$$q(\mathbf z_{t-1} \mid \mathbf x, \mathbf z_t) = \mathcal{N}(\boldsymbol \mu_{t-1|t}, \sigma_{t-1|t}^2,\mathbf I),$$
 
 with 
 
@@ -128,14 +124,32 @@ $$\mathbf z_t = \alpha_t \mathbf x + \sigma_t \hat{\boldsymbol \epsilon}_\theta,
 
 which works better in practice.
 
+### Prior Loss
+In eq. $(1)$ the first term is a prior loss, where $p(\mathbf z_T)$ is parameterized with a standard Gaussian. Since $q(\mathbf z_T \mid \mathbf x)$ is also Gaussian, we can compute the KL-divergence analytically. 
+
+### Likelihood
+The second term is a data likelihood term (e.g., reconstruction loss). We know that $\mathbf x$ has 256 distinct values.
+
+We define a Gaussian $\hat{p}(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \hat{\mathbf x}_\theta(\mathbf z_1; 1), \sigma_1^2 \mathbf I)$, where $\hat{\mathbf x}_\theta(\mathbf z_1; 1)$ is the reconstructed image from the first time-step. 
+As such, we re-use the same reconstruction network as in the diffusion loss. We can compute the likelihood analytically by integrating over the 256 possible values of $\mathbf x$.
+$$\begin{aligned}
+p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u}  \hat{p}(\mathbf x \mid \mathbf z_1) d \mathbf x \\
+&= \Phi((\mathbf x + d_u - \hat {\mathbf x}_\theta(\mathbf z_1; 1)) / \sigma_1)
+- \Phi((\mathbf x - d_u - \hat {\mathbf x}_\theta(\mathbf z_1; 1)) / \sigma_1) 
+\end{aligned}$$
+
+Now, $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$ & $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty$ & $d_l = 0.5$ for $\mathbf x = 255$ divide the whole space into 256 parts that naturally add to 1.
+
+Note: in practice, since $q(\mathbf z_1) \approx q(\mathbf x)$, i.e., there is such little noise added to obtain $\mathbf z_1$ from $\mathbf x$,  this loss is often omitted, or we simply put $p(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \mathbf z_1, \sigma_1^2 \mathbf I)$.
+
 ## Continuous Time
 Note that we know $q(\mathbf z_t \mid \mathbf z_s)$ analytically for every $s$ < $t$, even when we use continuous-time $t \in [0, 1]$! This is shown analogously to how we showed it for $q(\mathbf z_t \mid \mathbf z_{t-1})$. Adding the fact that our diffusion loss simply reconstructs $\mathbf x$ (or equivalently, recover $\boldsymbol \epsilon$) means that we can sample $t$ from a continuous interval and keep performing the reconstruction task. We need to discretize only when we sample from the model (as shown later).
 
 The diffusion loss, as shown in [Appendix B.3.](https://arxiv.org/abs/2107.00630), finally becomes
 
-$$\mathcal{L}_D:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log-\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{3}$$
+$$\mathcal{L}_D:= -\frac12 \mathbb{E}_{\boldsymbol \epsilon \sim \mathcal{N}(0, \mathbf I), t \sim U(0, 1)}\left[ \log\mathrm{SNR'}(t) \Vert \boldsymbol \epsilon - \hat{\boldsymbol \epsilon}_\theta(\mathbf z_t; t) \Vert^2_2 \right], \tag{3}$$
 
-with $\log-\mathrm{SNR'}(t) = \frac{d \log \mathrm{SNR}(t)}{dt} = \frac{d \log \alpha_t^2 / \sigma_t^2}{dt}$.
+with $\log\mathrm{SNR'}(t) = \frac{d \log \mathrm{SNR}(t)}{dt} = \frac{d \log \alpha_t^2 / \sigma_t^2}{dt}$.
 
 This loss function is a continuous version approximation of $(2)$, using Monte Carlo integration.
 
