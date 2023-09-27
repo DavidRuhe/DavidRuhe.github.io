@@ -51,7 +51,7 @@ Therefore, we see that
 
 $$q(\mathbf z_t \mid \mathbf z_{t-1}) = \mathcal{N}(\alpha_{t|t-1} \mathbf z_{t-1}, \sigma_{t|t-1}^2\mathbf I)$$ 
 
-and we can directly compute the coefficients $\alpha_{t|t-1}$ and $\sigma_{t|t-1}$ from the known noise schedule parameters.
+and we can directly compute the coefficients $\alpha_{t\|t-1}$ and $\sigma_{t\|t-1}$ from the known noise schedule parameters.
 
 We have obtained a tractable inference distribution $q(\mathbf x, \mathbf z_{1:T})$. We now parameterize a model $p_\theta(\mathbf x, \mathbf z_{1:T})$ in the data generating direction (from noise to data). We minimize the relative entropy
 
@@ -130,13 +130,18 @@ In eq. $(1)$ the first term is a prior loss, where $p(\mathbf z_T)$ is parameter
 ### Likelihood
 The second term is a data likelihood term (e.g., reconstruction loss). We know that $\mathbf x$ has 256 distinct values.
 
-We define a Gaussian $\hat{p}(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \hat{\mathbf x}_\theta(\mathbf z_1; 1)$, \sigma_1^2 \mathbf I)$, where $\hat{\mathbf x}_\theta(\mathbf z_1; 1)$ is the reconstructed image from the first time-step. 
+We define a Gaussian 
+$$r(\mathbf x \mid \mathbf z_1) := \mathcal{N}(\mathbf x \mid \hat{\mathbf x}_{\theta}(\mathbf z_1; 1), \sigma_1^2 \mathbf I)$$
+where $\hat{\mathbf x}_\theta(\mathbf z_1; 1)$ is the reconstructed image from the first time-step. 
 As such, we re-use the same reconstruction network as in the diffusion loss. We can compute the likelihood analytically by integrating over the 256 possible values of $\mathbf x$.
-$$\begin{aligned}
-p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u}  \hat{p}(\mathbf x \mid \mathbf z_1) d \mathbf x \\
+
+$$
+\begin{aligned}
+p(\mathbf x \mid \mathbf z_1) &= \int_{\mathbf x - d_l}^{\mathbf x  + d_u}  r(\mathbf x \mid \mathbf z_1) d \mathbf x \\
 &= \Phi((\mathbf x + d_u - \hat {\mathbf x}_\theta(\mathbf z_1; 1)) / \sigma_1)
 - \Phi((\mathbf x - d_u - \hat {\mathbf x}_\theta(\mathbf z_1; 1)) / \sigma_1) 
-\end{aligned}$$
+\end{aligned}
+$$
 
 Now, $d_u = d_l =0.5$ for $\mathbf x \in \{1, \dots, 254\}$,  $d_l=\infty$ & $d_u = 0.5$ for $\mathbf x = 0$, and $d_u = \infty$ & $d_l = 0.5$ for $\mathbf x = 255$ divide the whole space into 256 parts that naturally add to 1.
 
