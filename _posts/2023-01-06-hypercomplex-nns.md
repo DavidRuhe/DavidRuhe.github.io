@@ -26,7 +26,7 @@ Complex and quaternion numbers add depth to our numerical representations with t
 This shift in perspective is not just a simple change in the data representation. It paves the way for more advanced neural network architectures.
 This post serves as a first step in a series that explores these, called *Complex To Clifford*.
 In upcoming works, we will explore Clifford algebras.
-As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a universe of geometrically inspired learning models. Finally, we will culminate in the exploration of equivariant Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain invariances.
+As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a collection of geometrically inspired deep learning models. Finally, we will culminate in the exploration of *equivariant* Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain equi- or invariances.
 
 A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
 
@@ -84,7 +84,7 @@ During this flash of inspiration, he was walking along the Royal Canal in Dublin
 
 # Complex Neural Networks
 First, I'd like to start with a note on training complex neural networks.
-Generally, the papers we discuss here apply backpropagation in its native form (i.e., by using PyTorch's automatic differentiation) and do not consider complex or quaternion derivatives.
+Generally, the papers we discuss here apply backpropagation in its native form (i.e., by using PyTorch's automatic differentiation) and do not consider specialized complex or quaternion derivatives.
 
 Here, we follow [Trabelsi et al., *Deep Complex Networks*](https://arxiv.org/abs/1705.09792).
 The main idea is simply to replace any real-valued multiplication - as done in regular neural networks - with a complex-valued one.
@@ -293,4 +293,4 @@ Because of this generalization, we can also go a step further with them and trul
 Let me know in the comments below if you have questions, comments, or ideas worth sharing!
 
 # Acknowledgments
-I would like to thank Johannes Brandstetter, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
+I would like to thank Johannes Brandstetter, Jayesh Gupta, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
