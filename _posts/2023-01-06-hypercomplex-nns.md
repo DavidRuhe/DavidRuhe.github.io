@@ -3,7 +3,7 @@ layout: post
 author: David Ruhe
 title: "Complex to Clifford: Complex and Quaternion Neural Networks"
 comments: true
-hidden: true
+hidden: false
 date:   2023-01-06 00:00:00 +0200
 excerpt: This is a first post discussing a recent series of papers that build up to Clifford group equivariant models. In this series, we start with complex and quaternion neural networks, which can be generalized from a Clifford algebra perspective. Then we further include the Clifford algebra's geometric applications (which is why they are also known as geometric algebras). We then show how to incorporate a Clifford group equivariance constraint in such neural networks.
 
