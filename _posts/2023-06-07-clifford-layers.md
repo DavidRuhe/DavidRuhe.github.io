@@ -53,8 +53,8 @@ These naming conventions unfortunately lead to much confusion; the papers listed
 The construction (apart from mathematical details) of the Clifford algebra is relatively simple.
 We take a regular vector space $V$ over a field $\mathbb{F}$ (usually the reals $\mathbb{R}$) and turn it into a *quadratic vector space* (denoted with a tuple $(V, Q)$) by endowing it with a quadratic form $Q$.
 This quadratic form $Q: V \to \mathbb{F}$ takes a vector and returns a scalar.
-That is, vectors square to scalars!
-Note that we assume that we can multiply (and therefore square) vectors - a property inherited from the underlying *tensor algebra*. 
+We now say that for any vector $v \in V$, we have $v^2 = Q(v)$.
+That is, we assume we can *multiply* vectors, and relate it to the geometry of the vector space through its quadratic form.
 We will not go into more detail here, and the act of multiplying vectors will, later on, be elaborated on.
 
 Regarding the quadratic form, we could write in matrix notation
@@ -174,7 +174,7 @@ $$\Large ab = \langle a, b \rangle + a \wedge b$$
 
 <figure> 
     <div class="figure-image">
-    <img src="/assets/images/clifford-neural-layers/geometric-product.pdf" style="max-width: 384px;">
+    <img src="/assets/images/clifford-neural-layers/geometric-product.png" style="max-width: 384px;">
     </div>
   <figcaption>Visualization of the geometric product of two vectors as a combination of the dot and wedge product. For visualization purposes, we present the magnitude of the projection of $b$ onto $a$: $|b|\cos \theta$, which relates to the dot product as $\langle a, b \rangle = |a||b| \cos\theta$. Further, $a \wedge b$ is the size of the parallelogram that $a$ and $b$ define (colored in red). </figcaption>
 </figure>
@@ -270,7 +270,7 @@ Again, since the geometric product is linear, we can reshape this (as done in th
 
 <figure> 
     <div class="figure-image">
-        <img src="/assets/images/clifford-neural-layers/quatnet.pdf">
+        <img src="/assets/images/complex-quaternion/neural_network-6.png">
     </div>
     <div class="figure-image">
   <img src="/assets/images/clifford-neural-layers/header-p2.png">
