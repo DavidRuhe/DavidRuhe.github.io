@@ -12,10 +12,10 @@ excerpt: This is a first post discussing a recent series of papers that build up
 <figure> 
   <!-- <img src="/assets/images/complex-quaternion/header.png"> -->
   <div class="figure-image">
-    <img src="/assets/images/complex-quaternion/neural_network-7.pdf">
+    <img src="/assets/images/complex-quaternion/neural_network-7.png">
   </div>
   <div class="figure-image">
-    <img src="/assets/images/complex-quaternion/neural_network-6.pdf">
+    <img src="/assets/images/complex-quaternion/neural_network-6.png">
   </div>
   <figcaption>Left: complex neural network showing real (blue) and imaginary (red) parts. Observe how complex multiplication mixes in a fully connected way: red for imaginary to real, red dashed for imaginary to imaginary, blue for real to real, and blue dashed for real to imaginary. Right: quaternion neural network with real part in yellow, and imaginary parts in red, blue, and green. Note: unlike the complex neural network, the interconnections between the quaternion components is not depicted here to avoid heavy cluttering.</figcaption>
 </figure>
