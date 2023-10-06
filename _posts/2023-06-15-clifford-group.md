@@ -3,7 +3,7 @@ layout: post
 author: David Ruhe
 title: "Complex to Clifford: Clifford Group Equivariant Neural Networks"
 comments: true
-hidden: false
+hidden: true
 date:   2023-06-15 00:00:00 +0200
 excerpt: The final post of the series discusses multivector-valued neural networks that are equivariant with respect to actions from the Clifford group. These actions act as orthogonal transformations, effectively making the network equivariant or invariant with respect to, e.g., rotations or translations. Since orthogonal equivariance can be achieved for any quadratic space, we carry out a Lorentz-equivariant high energy physics experiment.
 ---
@@ -32,11 +32,10 @@ A selection of papers that explores (modern) (hyper)complex neural networks arch
 In this post, we focus on the following work, which presents geometric algebra layers and their applications to dynamical systems tasks. Disclaimer: I am the first author.
 * [David Ruhe, Johannes Brandstetter, Patrick Forré](https://arxiv.org/abs/2305.11141)
 
-# Outline (To do)
-* *<a href="#the-clifford-group">The Clifford Group </a>*We identify a group and its action inside the Clifford algebra.
-* *<a href="#clifford-neural-layers">Group Action Layers. </a>*How to construct Clifford neural layers?
-<!-- * *<a href="#the-geometric-product">The Geometric Product. </a>*The fundamental algebra product. -->
-* *<a href="#experiment-the-navier-stokes-equations">Experiment: Tetris. </a>*Modeling the Navier-Stokes equations using Clifford networks.
+# Outline
+* *<a href="#the-clifford-group">The Clifford Group. </a>*We identify a group and its action inside the Clifford algebra.
+* *<a href="#equivariant-operations">Equivariant Operations. </a>*What operations are equivariant with respect to this group?
+* *<a href="#experiment:-lorentz-equivariant-top-tagging-">Experiment: Lorentz Equivariance. </a>*An equivariant experiment in relativistic high energy physics.
 * *<a href="#conclusion">Conclusion. </a>* A wrapup and preview of what's coming up next in this series.
 
 
