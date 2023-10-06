@@ -22,7 +22,6 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
   .post-meta,
   .post-reading-time,
   .social-share-buttons {
@@ -30,6 +29,9 @@
     justify-content: center;
     text-align: center;
     padding-bottom: 10px;
+  }
+  .post p {
+    text-align: justify;
   }
 }
 
