@@ -1,5 +1,5 @@
 - image: "/assets/images/cgenn.png"
-  title: "Clifford Group Equivariant Neural Networks"
+  title: "Clifford Group Equivariant Neural Networks (NeurIPS 2023 Oral)"
   subtitle: "$\\mathrm{E}(n)$ steerable equivariance using Clifford's geometric algebra."
   authors: "David Ruhe, Johannes Brandstetter, Patrick Forr\u00E9"
   link: "https://arxiv.org/abs/2305.11141"
