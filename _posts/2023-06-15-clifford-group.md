@@ -3,7 +3,7 @@ layout: post
 author: David Ruhe
 title: "Complex to Clifford: Clifford Group Equivariant Neural Networks"
 comments: true
-hidden: true
+hidden: false
 date:   2023-06-15 00:00:00 +0200
 excerpt: The final post of the series discusses multivector-valued neural networks that are equivariant with respect to actions from the Clifford group. These actions act as orthogonal transformations, effectively making the network equivariant or invariant with respect to, e.g., rotations or translations. Since orthogonal equivariance can be achieved for any quadratic space, we carry out a Lorentz-equivariant high energy physics experiment.
 ---
@@ -101,7 +101,7 @@ $\rho(w)$ satisfies
 We use these properties to construct equivariant neural layers with respect to the Clifford group.
 However, by the last property (orthogonality) we see that the Clifford group acts as an *orthogonal* transformation!
 I.e., the Clifford group action preserves distances.
-hence, by being equivariant with respect to the Clifford group, we are equivariant with respect to the orthogonal group (rotations, reflections, etc).
+Hence, **by being equivariant with respect to the Clifford group, we are equivariant with respect to the orthogonal group (rotations, reflections, etc)**.
 
 # Equivariant Operations
 We prove Clifford equivariance of two rather fundamental operations: grade projections and polynomials.
