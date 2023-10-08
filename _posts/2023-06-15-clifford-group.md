@@ -34,7 +34,7 @@ A selection of papers that explores (modern) (hyper)complex neural networks arch
 * [C2C 3: Geometric Clifford Algebra Networks]({% post_url 2023-06-07-ga-layers %})
 * [C2C 4: Clifford Group Equivariant Neural Networks]({% post_url 2023-06-15-clifford-group %})
 
-If you are unfamiliar with the Clifford algebra, I highly suggest studying these in order. 
+If you are unfamiliar with the Clifford algebra, **I highly suggest studying these in order**. 
 If anything is unclear, please let me know in the comments below, or get in touch with me directly!
 
 In this post, we focus on the following work, which presents geometric algebra layers and their applications to dynamical systems tasks. Disclaimer: I am the first author.
