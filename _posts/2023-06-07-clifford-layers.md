@@ -19,7 +19,16 @@ excerpt: This is the second post of the Complex to Clifford series, in which we 
 In the [previous post]({% post_url 2023-01-06-hypercomplex-nns %}) of this series, we motivated and introduced complex and quaternion neural networks.
 Here, we discuss a recent paper that extends to *Clifford algebras*, obtaining further geometric inductive biases, which we will elaborate on.
 
-A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order. The posts in this series are:
+
+* [Complex and Quaternion Neural Networks]({% post_url 2023-01-06-hypercomplex-nns %})
+* [Clifford Neural Layers for PDE Modeling]({% post_url 2023-06-07-clifford-layers %})
+* [Geometric Clifford Algebra Networks]({% post_url 2023-06-07-ga-layers %})
+* [Clifford Group Equivariant Neural Networks]({% post_url 2023-06-15-clifford-group %})
+
+If you are unfamiliar with the Clifford algebra, I highly suggest studying these in order. 
+If anything is unclear, please let me know in the comments below, or get in touch with me directly!
+
 
 In this post, we focus on the following work, which presents Clifford-valued neural layers and their applications to partial differential equation neural surrogates. 
 * [Johannes Brandstetter, Rianne van den Berg, Max Welling, Jayesh K. Gupta (ICLR 2023): Clifford Neural Layers for PDE Modeling](https://arxiv.org/abs/2209.04934)
@@ -361,7 +370,7 @@ In the [next post]({% post_url 2023-06-07-ga-layers %}) of this series, we dive 
 Let me know in the comments below if you have questions, comments, or ideas worth sharing!
 
 # Acknowledgments
-I would like to thank Johannes Brandstetter, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
+I would like to thank Johannes Brandstetter, Jayesh Gupta, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
 
 
 

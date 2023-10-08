@@ -3,7 +3,7 @@ layout: post
 author: David Ruhe
 title: "Complex to Clifford: Clifford Group Equivariant Neural Networks"
 comments: true
-hidden: true
+hidden: false
 date:   2023-06-15 00:00:00 +0200
 excerpt: The final post of the series discusses multivector-valued neural networks that are equivariant with respect to actions from the Clifford group. These actions act as orthogonal transformations, effectively making the network equivariant or invariant with respect to, e.g., rotations or translations. Since orthogonal equivariance can be achieved for any quadratic space, we carry out a Lorentz-equivariant high energy physics experiment.
 ---
@@ -27,7 +27,15 @@ Thereby, the network is equivariant to rotations.
 Further, we see that the *group action* $\rho(w)$ respects the multivector grading.
 That is, the vectors, bivectors, trivectors are individually and consistently affected by the transformation.
 
-A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order. The posts in this series are:
+
+* [Complex and Quaternion Neural Networks]({% post_url 2023-01-06-hypercomplex-nns %})
+* [Clifford Neural Layers for PDE Modeling]({% post_url 2023-06-07-clifford-layers %})
+* [Geometric Clifford Algebra Networks]({% post_url 2023-06-07-ga-layers %})
+* [Clifford Group Equivariant Neural Networks]({% post_url 2023-06-15-clifford-group %})
+
+If you are unfamiliar with the Clifford algebra, I highly suggest studying these in order. 
+If anything is unclear, please let me know in the comments below, or get in touch with me directly!
 
 In this post, we focus on the following work, which presents geometric algebra layers and their applications to dynamical systems tasks. Disclaimer: I am the first author.
 * [David Ruhe, Johannes Brandstetter, Patrick Forré](https://arxiv.org/abs/2305.11141)
@@ -41,7 +49,7 @@ In this post, we focus on the following work, which presents geometric algebra l
 
 # The Clifford Group
 This work is more technical than the previous works, and investigates the Clifford algebra from first principles.
-I highly suggest studying the [previous posts]() first if you are unfamiliar with the Clifford algebra and typical constructions.
+I highly suggest studying the [previous posts]({% post_url 2023-01-06-hypercomplex-nns %}) first if you are unfamiliar with the Clifford algebra and typical constructions.
 Let $(V, q)$ be a quadratic space.
 Let $\Cl(V, q)$ denote its Clifford algebra.
 
@@ -263,9 +271,4 @@ Let me know in the comments below if you have ideas or questions worth sharing!
 
 
 # Acknowledgments
-I would like to thank Johannes Brandstetter, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.
-
-
-
-
-
+I would like to thank Johannes Brandstetter, Jayesh Gupta, Marco Federici, and Jim Boelrijk for providing valuable feedback regarding this blogpost series.

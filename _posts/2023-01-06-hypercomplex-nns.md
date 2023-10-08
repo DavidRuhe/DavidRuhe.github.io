@@ -28,7 +28,15 @@ This post serves as a first step in a series that explores these, called *Comple
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a collection of geometrically inspired deep learning models. Finally, we will culminate in the exploration of *equivariant* Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain equi- or invariances.
 
-A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order.
+A selection of papers that explores (modern) (hyper)complex neural networks architecture is [Danihelka et al. (ICML 2016)](https://arxiv.org/abs/1602.03032), [Trabelsi et al. (ICLR 2018)](https://arxiv.org/abs/1705.09792), [Parcollet et al. (ICLR 2019)](https://arxiv.org/abs/1806.04418), [Tay et al. (ACL 2019)](https://arxiv.org/abs/1906.04393), [Zhang et al. (ICLR 2021)](https://arxiv.org/abs/2102.08597), [Brandstetter et al. (ICLR 2023)](https://arxiv.org/abs/2209.04934), [Ruhe et al. (ICML 2023)](https://arxiv.org/abs/2302.06594), [Ruhe et al. (2023)](https://arxiv.org/abs/2305.11141), and [Brehmer et al. (2023)](https://arxiv.org/abs/2305.18415). These works are largely incremental; hence, we discuss them in this series in chronological order. The posts in this series are:
+
+* [Complex and Quaternion Neural Networks]({% post_url 2023-01-06-hypercomplex-nns %})
+* [Clifford Neural Layers for PDE Modeling]({% post_url 2023-06-07-clifford-layers %})
+* [Geometric Clifford Algebra Networks]({% post_url 2023-06-07-ga-layers %})
+* [Clifford Group Equivariant Neural Networks]({% post_url 2023-06-15-clifford-group %})
+
+If you are unfamiliar with the Clifford algebra, I highly suggest studying these in order. 
+If anything is unclear, please let me know in the comments below, or get in touch with me directly!
 
 In this post, we focus on the following papers, which propose complex and quaternion-valued networks, respectively.
 * [Chiheb Trabelsi et al. (ICLR 2018): Deep Complex Networks](https://arxiv.org/abs/1705.09792)
