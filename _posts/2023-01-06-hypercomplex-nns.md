@@ -1,7 +1,7 @@
 ---
 layout: post
 author: David Ruhe
-title: "C2C: Complex and Quaternion Neural Networks"
+title: "C2C 1: Complex and Quaternion Neural Networks"
 comments: true
 hidden: false
 date:   2023-01-06 00:00:00 +0200

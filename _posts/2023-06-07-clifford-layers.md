@@ -1,7 +1,7 @@
 ---
 layout: post
 author: David Ruhe
-title: "C2C: Clifford Neural Layers for PDE Modeling"
+title: "C2C 2: Clifford Neural Layers for PDE Modeling"
 comments: true
 hidden: false
 date:   2023-06-07 00:00:00 +0200
