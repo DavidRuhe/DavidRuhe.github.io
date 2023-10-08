@@ -1,7 +1,7 @@
 ---
 layout: post
 author: David Ruhe
-title: "Complex to Clifford: Complex and Quaternion Neural Networks"
+title: "C2C: Complex and Quaternion Neural Networks"
 comments: true
 hidden: false
 date:   2023-01-06 00:00:00 +0200
@@ -24,7 +24,7 @@ excerpt: This is a first post discussing a recent series of papers that build up
 Complex and quaternion numbers add depth to our numerical representations with their additional dimensions, enabling them to encapsulate more information more efficiently. By nature, they are better equipped to represent phenomena that involve both magnitude and phase (such as electromagnetic waves), or three-dimensional rotations.
 
 This shift in perspective is not just a simple change in the data representation. It paves the way for more advanced neural network architectures.
-This post serves as a first step in a series that explores these, called *Complex To Clifford*.
+This post serves as a first step in a series that explores these, called *Complex To Clifford* (C2C).
 In upcoming works, we will explore Clifford algebras.
 As a natural extension of complex and quaternion numbers, Clifford algebra allows us to operate in multiple dimensions efficiently and opens the door to a collection of geometrically inspired deep learning models. Finally, we will culminate in the exploration of *equivariant* Clifford networks, which take advantage of these geometric insights to deliver impressive performance on a variety of tasks while maintaining certain equi- or invariances.
 

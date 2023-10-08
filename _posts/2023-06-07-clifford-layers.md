@@ -1,11 +1,11 @@
 ---
 layout: post
 author: David Ruhe
-title: "Complex to Clifford: Clifford Neural Layers for PDE Modeling"
+title: "C2C: Clifford Neural Layers for PDE Modeling"
 comments: true
 hidden: false
 date:   2023-06-07 00:00:00 +0200
-excerpt: This is the second post of the Complex to Clifford series, in which we dive into complex and quaternion-valued networks, and build all the way up to Clifford group equivariant networks. Here, we discuss a recent paper that uses the Clifford algebra to construct neural network layers to accelerate PDE solving.
+excerpt: This is the second post of the Complex to Clifford (C2C) series, in which we dive into complex and quaternion-valued networks, and build all the way up to Clifford group equivariant networks. Here, we discuss a recent paper that uses the Clifford algebra to construct neural network layers to accelerate PDE solving.
 ---
 
 <figure> 

@@ -1,7 +1,7 @@
 ---
 layout: post
 author: David Ruhe
-title: "Complex to Clifford: Clifford Group Equivariant Neural Networks"
+title: "C2C: Clifford Group Equivariant Neural Networks"
 comments: true
 hidden: false
 date:   2023-06-15 00:00:00 +0200
