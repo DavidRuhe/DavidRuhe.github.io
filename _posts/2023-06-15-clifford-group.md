@@ -240,6 +240,8 @@ input = torch.cat([h_cl, x_cl], dim=1)
 We embed the scalar features into the scalar part of the algebra and the vector features into the vector part, which are the 0 and 1 grades, respectively.
 Then we concatenate the two parts to obtain the input data.
 
+At the end of our neural network (layer on) we want to extract scalar or vector data to make our predictions. For those, we can use `algebra.get_grade`.
+
 We can now operate on this data using $\rho(w)$: the Clifford group action. 
 The goal is that the network respects (i.e., is equivariant or invariant with resepct to) this action.
 Remember, $\rho(w)$ represents a rotation, reflection, or other orthogonal transformation.
