@@ -43,20 +43,21 @@ In this post, we focus on the following work, which presents geometric algebra l
 # Outline
 * *<a href="#the-clifford-group">The Clifford Group. </a>*We identify a group and its action inside the Clifford algebra.
 * *<a href="#equivariant-operations">Equivariant Operations. </a>*What operations are equivariant with respect to this group?
-* *<a href="#experiment:-lorentz-equivariant-top-tagging-">Experiment: Lorentz Equivariance. </a>*An equivariant experiment in relativistic high energy physics.
+* *<a href="#experiment-lorentz-equivariant-top-tagging">Experiment: Lorentz Equivariance. </a>*An equivariant experiment in relativistic high energy physics.
 * *<a href="#conclusion">Conclusion. </a>* A wrapup and preview of what's coming up next in this series.
 
 
 # The Clifford Group
 This work is more technical than the previous works, and investigates the Clifford algebra from first principles.
-I highly suggest studying the [previous posts]({% post_url 2023-01-06-hypercomplex-nns %}) first if you are unfamiliar with the Clifford algebra and typical constructions.
+I suggest studying the [previous posts]({% post_url 2023-01-06-hypercomplex-nns %}) first if you are unfamiliar with the Clifford algebra and typical constructions.
 Let $(V, q)$ be a quadratic space.
 Let $\Cl(V, q)$ denote its Clifford algebra.
 
 We first define a specific map $\rho(w): \Cl(V, q) \to \Cl(V, q)$ that has 
 
-$$\rho(w)(x):= wx^{[0]}w^{-1} + \alpha(w)x^{[1]}w^{-1}\,.$$
+$$\rho(w)(x):= wx^{[0]}w^{-1} + \alpha(w)x^{[1]}w^{-1}\,,$$
 
+where $w \in \Cl^{\times}(V, q)$ is an invertible element.
 Let's investigate this equation.
 First, we see a similar sandwich structure using geometric products as previously applied in the [group action layers]({% post_url 2023-06-07-ga-layers %}).
 However, it is split into two terms.
@@ -204,14 +205,156 @@ $$
 which are more expensive but also more expressive.
 
 
-#### Implementation
-For the implementation of these layers, consider the [official repository](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks) and specifically one can consider a [small tutorial](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks/blob/master/notebooks/tutorial.ipynb) demonstrating the equivariance of these networks.
+# Implementation
+<!-- For the implementation of these layers, consider the [official repository](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks) and specifically one can consider a [small tutorial](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks/blob/master/notebooks/tutorial.ipynb) demonstrating the equivariance of these networks. -->
+Here, we will discuss the implementation of these layers.
+The official implementation can be found [here](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks)
+including a [small tutorial](https://github.com/DavidRuhe/clifford-group-equivariant-neural-networks/blob/master/notebooks/tutorial.ipynb).
+We also have an interactive demo at <a href="https://colab.research.google.com/drive/1Lwxn11gLBtUkNU9s0DV3QgFFedNjFBl3?usp=sharing">
+    <strong>Google Colaboratory Tutorial:</strong> <img src="https://colab.research.google.com/assets/colab-badge.svg" height="20">
+</a>
 
+####  Clifford Algebra Object
+To work with the layers introduced above, we need to be able to represent and operate on multivectors.
+Let's say we are in a two-dimensional space.
+We consider some vector data, e.g., the positions of a set of planets.
+Further, we have scalar features, e.g., the mass of the planets.
+We can represent this data as follows:
+
+```python
+  algebra = CliffordAlgebra((1., 1.))
+  h = torch.randn(1, 8, 1)  # 8 scalar features
+  x = torch.randn(1, 8, 2)  # 8 vector features, note that we have 2 dimensions.
+```
+We have a batch dimension of 1.
+We create a Clifford algebra object by passing the signature of the quadratic form.
+Since it has two positive entries, we are in a two-dimensional Euclidean space.
+
+To embed the data into the algebra, we use the `embed_grade` method.
+```python
+h_cl = algebra.embed_grade(h, 0)
+x_cl = algebra.embed_grade(x, 1)
+
+input = torch.cat([h_cl, x_cl], dim=1)
+```
+We embed the scalar features into the scalar part of the algebra and the vector features into the vector part, which are the 0 and 1 grades, respectively.
+Then we concatenate the two parts to obtain the input data.
+
+We can now operate on this data using $\rho(w)$: the Clifford group action. 
+The goal is that the network respects (i.e., is equivariant or invariant with resepct to) this action.
+Remember, $\rho(w)$ represents a rotation, reflection, or other orthogonal transformation.
+To create orthogonal representations, we use the `versor` method, which composes reflections, leading to orthogonal transformations.
+```python
+# Reflector
+v = algebra.versor(1)
+
+# Rotor
+R = algebra.versor(2)
+```
+A *1-versor* is a reflection, where two reflections (*2-versor*) compose to a rotation.
+
+We can create reflected and rotated versions of the input data as follows:
+```python
+input_v = algebra.rho(v, input.clone())
+
+input_R = algebra.rho(R, input.clone())
+```
+
+Other common multivector operations are also available; see the official repository for more details.
+
+#### Linear Layers
+We inspect the `forward` method of the linear layer implementation.
+```python
+    def _forward(self, input):
+        return torch.einsum("bmi", input, self.weight)
+
+    def _forward_subspaces(self, input):
+        weight = self.weight.repeat_interleave(self.algebra.subspaces, dim=-1)
+        return torch.einsum('bmi, nmi->bni', input, weight)
+
+    def forward(self, input):
+        result = self._forward(input)
+
+        if self.bias is not None:
+            bias = self.algebra.embed(self.bias, self.b_dims)
+            result += unsqueeze_like(bias, result, dim=2)
+        return result
+```
+`self._forward` is set dependent on whether we want a linear combination in each grade (subspace) or on the entire multivectors.
+Usually, one wants the former, and efficiency gains by operating on entire multivectors together are insignificant.
+We use `torch.einsum` to efficiently implement the operation.
+Inspecting the einsum signature, we see that we go from `m` channels to `n` channels, for each Clifford grade `i`.
+
+Finally, we can add a bias term to the zero subspace. To achieve $\mathrm{SO}(n)$-equivariance (as opposed to $\mathrm{O}(n)$), one can also add a learned pseudoscalar bias term.
+
+#### Geometric Product Layers
+We inspect the `forward` method of the element-wise geometric product layer implementation.
+```python
+        input_right = self.linear_right(input)
+        input_right = self.normalization(input_right)
+
+        weight = self._get_weight()
+
+        if self.include_first_order:
+            return (
+                self.linear_left(input)
+                + torch.einsum("bni, nijk, bnk -> bnj", input, weight, input_right)
+            ) / math.sqrt(2)
+
+        else:
+            return torch.einsum("bni, nijk, bnk -> bnj", input, weight, input_right)
+```
+
+Given our inputs, we first linearly transform them to get a new set of multivectors.
+One can imagine a permutation of the input channels.
+Then, we normalize the right-hand side of the geometric product to avoid numerical instabilities throughout the network.
+This, as described in the paper, is a *learned* normalization. 
+Alternatives, such as regular multivector normalization or no normalization at all sometimes also work, and more exploration would be useful here.
+Finally, we compute the geometric products using `torch.einsum`.
+As such, we get multiplicative interaction between the input channels.
+If `self.include_first_order` is set to `True`, we also apply another linear to get a full polynomial up to the second order.
+
+Note that we compute element-wise geometric products here.
+We also have a fully-connected version of this, where we compute the geometric product between all pairs of input channels.
+#### Multivector Sigmoid Linear Units
+The final layer we discuss here is the multivector sigmoid linear unit (MVSiLU).
+Its forward map is given by
+```python
+    def forward(self, input):
+        norms = self._get_invariants(input)
+        norms = torch.cat([input[..., :1], *norms], dim=-1)
+        a = unsqueeze_like(self.a, norms, dim=2)
+        b = unsqueeze_like(self.b, norms, dim=2)
+        norms = a * norms + b
+        norms = norms.repeat_interleave(self.algebra.subspaces, dim=-1)
+        return torch.sigmoid(norms) * input
+```
+
+Here, we first get the invariants of the input multivectors.
+The first subspace is always invariant, so we don't compute its magnitude but just concatenate it to the rest.
+We can then apply **any scalar function** to the invariants.
+Here, we just scale and shift them and apply a `sigmoid`, but for more expressive power, one could also use a neural network MLP!
+We apply this technique in some experiments.
+
+
+#### Equivariant Neural Networks
+By combining layers as presented above, we can create equivariant Clifford neural networks.
+We can even create more exotic architectures, such as GNNs, Transformers, and so on.
+So long as all operations are equivariant, the network will be equivariant.
+For GNNs, for example, the message passing reduction is usually a sum or mean, which both are equivariant.
+We also have an interactive demo at <a href="https://colab.research.google.com/drive/1Lwxn11gLBtUkNU9s0DV3QgFFedNjFBl3?usp=sharing">
+    <strong>Google Colaboratory Tutorial:</strong> <img src="https://colab.research.google.com/assets/colab-badge.svg" height="20">
+</a>
 
 # Experiment: Lorentz-equivariant Top Tagging
 One very nice property of Clifford equivariant networks is that we can be invariant or equivariant with respect to the orthogonal transformations of *any* quadratic space.
 That includes the [*Minkowski space*](https://en.wikipedia.org/wiki/Minkowski_space) of [Einstein's special relativity](https://en.wikipedia.org/wiki/Special_relativity).
 The orthogonal transformations of this space are captured by the [Lorentz group](https://en.wikipedia.org/wiki/Lorentz_group) $\mathrm{O}(1, 3)$.
+That is, the metric $M$ is given by $M:=\mathrm{diag}(1, -1, -1, -1)$.
+This changes the way distances (norms, inner products) are calculated in the space.
+Namely, for two vectors $u, v \in \mathbb{R}^4$, we have $\langle u, v \rangle = u^T M v$,
+where the metric acts in the middle.
+In the Euclidean space, the metric is the identity matrix, and the inner product is the standard dot product.
 
 This group captures the effect that moving at a fixed velocity changes one's perception of a phenomenon.
 That is, the laws of physics should be invariant to the *inertial frame of reference*.
