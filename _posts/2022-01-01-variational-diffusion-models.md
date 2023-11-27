@@ -15,7 +15,7 @@ Diffusion models have recently gained popularity by obtaining exceptional high-q
 
 ![Figure 1](/assets/images/pgm_diagram_xarrow.png)
 
-This post details how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2019 paper titled [Variational Diffusion Models](https://arxiv.org/abs/2107.00630).
+This post details how the models are formally developed and provide [a simple implementation](https://github.com/DavidRuhe/simple-variational-diffusion-models). Specifically, we follow the Kingma et al., 2021 paper titled [Variational Diffusion Models](https://arxiv.org/abs/2107.00630).
 
 
 ## Model Development
