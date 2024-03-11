@@ -4,13 +4,22 @@ layout: default
 
 <div class="home">
   {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
+  <h1 class="page-heading">{{ page.title }}</h1>
   {%- endif -%}
 
   {{ content }}
 
 
   {% include about.html %}
+
+
+  <hr class="section-hr">
+
+  <div id="publications">
+    <h1>Selected Publications</h1>
+    {% include publications.html %}
+    <!-- <hr class="section-hr"> -->
+  </div>
 
   <hr class="section-hr">
 
@@ -21,31 +30,27 @@ layout: default
       {%- for post in site.posts -%}
       {%- if post.hidden != true -%}
       <a href="{{ post.url | relative_url }}">
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
+        <li>
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          <span class="post-meta">{{ post.date | date: date_format }}</span>
+          <h3>
             {{ post.title | escape }}
-        </h3>
-        {%- if site.show_excerpts -%}
+          </h3>
+          {%- if site.show_excerpts -%}
           <p>
-          {{ post.excerpt }}
+            {{ post.excerpt }}
           </p>
-        {%- endif -%}
-      </li>
+          {%- endif -%}
+        </li>
       </a>
       {%- endif -%}
       {%- endfor -%}
     </ul>
   </div>
 
+
   <hr class="section-hr">
 
-  <div id="publications">
-  <h1>Selected Publications</h1>
-  {% include publications.html %}
-  <hr class="section-hr">
-  </div>
 
   {% include cv.html %}
 
