@@ -161,9 +161,17 @@ figcaption {
 
 .social-bar {
   display: block;
+  line-height: 46px;
+  padding-top: 8px;
+
+  .page-link{
+    // display: inline-block;
+    margin-right: 16px;
+    color: #000;
+  }
 }
 
-@include media-query($on-laptop) {
+@include media-query($on-palm) {
   .social-bar {
       display: none;
   }
