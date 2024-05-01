@@ -23,7 +23,10 @@ email: d.ruhe@uva.nl
 description: >- # this means to ignore newlines until "baseurl:"
   David Ruhe - Ph.D. Student at the University of Amsterdam
 about: >-
-  I am a fourth-year Ph.D. student in the <a href="http://amlab.science.uva.nl">Amsterdam Machine Learning Lab (AMLab)</a> and the <a href="https://ai4science-amsterdam.github.io">AI4Science</a> lab of the University of Amsterdam. I work on developing new machine learning algorithms that can help solve scientific research questions. I have published several works on using the <a href="https://en.wikipedia.org/wiki/Geometric_algebra">Geometric Algebra</a> in deep learning, as well as physics-inspired time-series inference and generative models.
+  I am a fourth-year Ph.D. student in the <a href="http://amlab.science.uva.nl">Amsterdam Machine Learning Lab (AMLab)</a> and the <a href="https://ai4science-amsterdam.github.io">AI4Science</a> lab of the University of Amsterdam. 
+  I have also interned at <a href="https://deepmind.google">Google Deepmind</a>, <a href="https://www.microsoft.com/en-us/research/lab/microsoft-research-ai4science/">Microsoft Research (AI4Science)</a>, and the Simon's Foundation's <a href="https://www.simonsfoundation.org">Flatiron Institute</a>. 
+  My research interests include (3D) geometric deep learning, AI4Science, computer vision, generative models and time-series, often working at an intersection of these.
+  In particular, I have published several works on using the <a href="https://en.wikipedia.org/wiki/Geometric_algebra">Geometric Algebra</a> in deep learning architectures.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: djjruhe
