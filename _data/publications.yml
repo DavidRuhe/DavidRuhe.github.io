@@ -5,13 +5,13 @@
   link: "https://arxiv.org/abs/2305.11141"
 
 - image: "/assets/images/gcan.png"
-  title: "Geometric Clifford Algebra Networks (ICML 2023)"
+  title: "Geometric Clifford Algebra Networks (Microsoft Research, ICML 2023)"
   subtitle: "Incorporating geometry into neural network transformations."
   authors: "David Ruhe, Jayesh K. Gupta, Steven de Keninck, Max Welling, Johannes Brandstetter"
   link: "https://arxiv.org/abs/2302.06594"
 
 - image: "/assets/images/rolling-diffusion.png"
-  title: "Rolling Diffusion Models (ICML 2024)"
+  title: "Rolling Diffusion Models (Google Deepmind, ICML 2024)"
   subtitle: "A temporal prior for video diffusion."
   authors: "David Ruhe, Jonathan Heek, Tim Salimans, Emiel Hoogeboom"
   link: "https://arxiv.org/abs/2402.09470"
