@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="David Ruhe">
+    <meta name="description" content="Research Scientist">
+    <title>David Ruhe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: white;
+            --text-color: black;
+            --secondary-text-color: #667;
+            --border-color: #ddd;
+            --news-bg-color: #f9f9f9;
+            --link-color: #0077cc;
+            --link-hover-color: #005fa3;
+            --link-active-color: #003f6a;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: var(--link-active-color);
+        }
+
+        .dark-mode {
+            --bg-color: #1a2333;
+            --text-color: #e0e6ed;
+            --secondary-text-color: #8f9bad;
+            --border-color: #2c3e50;
+            --news-bg-color: #222c3c;
+            --link-color: #4dabf7;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .profile-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .profile-photo {
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text-color)
+        }
+
+        .profile-details {
+            color: var(--secondary-text-color);
+            font-size: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-icon {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: var(--link-hover-color);
+        }
+
+        .profile-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 2;
+            align-items: flex-start;
+        }
+
+        .bio-section,
+        .details-columns {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .details-columns {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .details-column {
+            flex: 1;
+        }
+
+        .details-column h3 {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .details-column ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .details-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .edu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 5px 20px;
+            margin-bottom: 15px;
+        }
+
+        .edu-item i {
+            font-size: 1rem;
+            color: var(--link-color);
+        }
+
+        .edu-item .edu-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edu-item .edu-degree {
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .edu-item .edu-university {
+            font-size: 0.8rem;
+            color: var(--secondary-text-color);
+        }
+
+        .news-section {
+            padding: 10px 0;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .news-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: var(--news-bg-color);
+        }
+
+        .news-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item p {
+            margin: 0px 0;
+        }
+
+        .news-date {
+            color: var(--secondary-text-color);
+            font-size: 0.8rem;
+        }
+
+        footer {
+            color: var(--secondary-text-color);
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .profile {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-left,
+            .profile-right {
+                width: 100%;
+                align-items: center;
+                text-align: center;
+            }
+
+            .details-columns {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .details-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the items horizontally */
+    justify-content: center; /* Centers the items vertically */
+    flex: 1;
+}        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="theme-icon fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <div class="profile">
+            <div class="profile-left">
+                <img src="assets/images/personal.jpeg" alt="David Ruhe" class="profile-photo">
+                <div class="profile-name">David Ruhe</div>
+                <div class="profile-details">
+                    <div>Research Scientist</div>
+                    <div><a href="https://deepmind.google">Google DeepMind</a></div>
+                </div>
+                <div class="social-icons">
+                    <a href="https://scholar.google.com/citations?user=JoXl9zUAAAAJ&hl=en&oi=ao" class="social-icon"
+                        title="Google Scholar">
+                        <i class="fas fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://x.com/djjruhe" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/in/david-ruhe-2a0a0b155/" class="social-icon"><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/DavidRuhe" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="mailto:david.ruhe@gmail.com" class="social-icon" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+
+                </div>
+            </div>
+            <div class="profile-right">
+                <div class="bio-section">
+                    <h2>Biography</h2>
+                    <p>I am a research scientist on the generative models team at <a
+                            href="https://deepmind.google">Google DeepMind</a>. Previously, I was a Ph.D. student in the
+                        <a href="http://amlab.science.uva.nl">Amsterdam Machine Learning Lab (AMLab)</a> and its <a
+                            href="https://ai4science-amsterdam.github.io">AI4Science</a> subgroup.
+
+                        I have also interned at <a href="https://deepmind.google">Google DeepMind</a>, <a
+                            href="https://www.microsoft.com/en-us/research/lab/microsoft-research-ai4science/">Microsoft
+                            Research (AI4Science)</a>, and the <a href="https://www.simonsfoundation.org">Simons
+                            Foundation's Flatiron Institute</a>.
+
+                        My research interests include generative models, scientific machine learning, and structured
+                        deep learning through geometric or time-series priors.
+                    </p>
+                </div>
+
+                <div class="details-columns">
+                    <div class="details-column">
+                        <h3>Research Interests</h3>
+                        <ul>
+                            <li>Structured Deep Learning</li>
+                            <li>Generative Models</li>
+                            <li>Scientific Machine Learning</li>
+                        </ul>
+                    </div>
+                    <div class="details-column">
+                        <h3>Education</h3>
+                        <div class="edu-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div class="edu-details">
+                                <div class="edu-degree">Ph.D. in Artificial Intelligence, 2025</div>
+                                <div class="edu-university">University of Amsterdam</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="news-section">
+            <h2>Latest News</h2>
+            <div class="news-container">
+                <div class="news-item">
+                    <span class="news-date">Feb 2025</span>
+                    <p>Joined the <a
+                        href="https://deepmind.google">Google DeepMind</a> Amsterdam team as a Research Scientist.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Jul 2024</span>
+                    <p>Presented at <a href="https://icml.cc">ICML</a> two full papers and two workshop papers at the <a href="https://gram-workshop.github.io">GRaM</a> workshop.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">May 2024</span>
+                    <p><a href="https://arxiv.org/abs/2402.09470">Rolling Diffusion Models</a> and <a href="https://arxiv.org/abs/2402.14730">Clifford-Steerable Convolutional Neural Networks</a> both got accepted to ICML!</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Jan 2024</span>
+                    <p><a href="https://arxiv.org/abs/2402.10011">Clifford Group Equivariant Simplicial Networks</a> got accepted to ICLR 2024!</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Dec 2023</span>
+                    <p>Gave an oral presentation (top 0.5% of submissions, top 2% of accepted papers) on <a href="https://arxiv.org/abs/2305.11141">Clifford-Group Equivariant Networks</a> at NeurIPS.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Oct 2023</span>
+                    <p>Started my Student Researcher project with the <a
+                        href="https://deepmind.google">Google DeepMind</a> Amsterdam team.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Jul 2023</span>
+                    <p>Presented <a href="https://arxiv.org/abs/2302.06594">Geometric Clifford Algebra Networks</a> at ICML 2023.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Mar 2023</span>
+                    <p>Joined the University of Amsterdam's Deep Learning 2 MSc course as a TA.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Dec 2022</span>
+                    <p>Presented a workshop paper at the <a href="https://ml4physicalsciences.github.io/2022/">Machine Learning For The Physical Sciences</a> workshop at NeurIPS 2022.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Dec 2022</span>
+                    <p>I was selected as a top 10% reviewer for AISTATS 2022!</p>
+                </div>
+
+                <div class="news-item">
+                    <span class="news-date">Sep 2022</span>
+                    <p>Started an internship at <a href="https://www.microsoft.com/en-us/research/lab/microsoft-research-ai-for-science/">Microsoft AI4Science</a> Amsterdam.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Sep 2022</span>
+                    <p>I was considered a top 8% reviewer for NeurIPS 2022.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">June 2022</span>
+                    <p>Started a summer internship at <a href="https://www.simonsfoundation.org/flatiron/">Simon Foundation's Flatiron Institute</a>.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Jan 2022</span>
+                    <p>Our paper <a href="https://arxiv.org/abs/2107.13349">Self-Supervised Inference in State-Space Models</a> got accepted to ICLR 2022!</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Sep 2021</span>
+                    <p>Joined the University of Amsterdam's Machine Learning 2 MSc course as a TA.</p>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">Sep 2020</span>
+                    <p>Joined the University of Amsterdam's Machine Learning 1 MSc course as a TA.</p>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 David Ruhe. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+    </script>
+</body>
+
+</html>
